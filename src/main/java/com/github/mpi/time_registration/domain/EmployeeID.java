@@ -3,7 +3,7 @@ package com.github.mpi.time_registration.domain;
 public class EmployeeID {
 
     private final String id;
-    
+
     public EmployeeID(String id) {
         this.id = id;
     }

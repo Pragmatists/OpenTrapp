@@ -1,3 +1,5 @@
+sourceCompatibility = 1.8
+
 buildscript{
     repositories {
         mavenCentral()
@@ -15,7 +17,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.9'
 }
 
-repositories { 
+repositories {
 
     mavenCentral()
 }
@@ -25,7 +27,7 @@ ext {
     springSecurityVersion = '3.1.0.RELEASE'
     springDataVersion = '1.0.4.RELEASE'
     jacksonVersion = '1.9.12'
-    jettyVersion = '7.6.0.v20120127'
+    jettyVersion = '9.2.0.M1'
 }
 
 sourceSets {
@@ -42,6 +44,10 @@ sourceSets {
         compileClasspath = compileClasspath + files(test.output.classesDir)
         runtimeClasspath = output + compileClasspath
     }
+}
+
+compileJava {
+    options.compilerArgs << '-parameters'
 }
 
 configurations {
@@ -71,8 +77,8 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.0'
         
     
-    compile 'org.mongodb:mongo-java-driver:2.9.1'
-    compile "org.springframework.data:spring-data-mongodb:$springDataVersion"
+    compile 'org.mongodb:mongo-java-driver:2.12.1'
+    compile "org.springframework.data:spring-data-mongodb:1.4.2.RELEASE"
     compile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.28'
     
     testCompile 'junit:junit:4.11'
@@ -84,7 +90,7 @@ dependencies {
     
     testCompile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
     testCompile "org.eclipse.jetty:jetty-webapp:$jettyVersion"
-    runtimeOnly "org.mortbay.jetty:jetty-runner:$jettyVersion"
+    runtimeOnly "org.eclipse.jetty:jetty-runner:$jettyVersion"
     
     compile (
         [group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.6.2'],

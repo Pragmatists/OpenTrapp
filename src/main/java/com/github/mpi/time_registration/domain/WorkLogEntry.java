@@ -1,5 +1,7 @@
 package com.github.mpi.time_registration.domain;
 
+import org.springframework.data.annotation.PersistenceConstructor;
+
 import com.github.mpi.time_registration.domain.time.Day;
 
 public class WorkLogEntry {
