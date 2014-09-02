@@ -1,6 +1,6 @@
 package com.github.mpi.users_and_access.infrastructure.spring;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,9 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.openid.OpenIDAttribute;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
-
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class OpenIDUserServiceTest {
 

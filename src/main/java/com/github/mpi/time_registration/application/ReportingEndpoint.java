@@ -66,7 +66,7 @@ public class ReportingEndpoint {
     }
 
     private WorkLogJson jsonResponse(WorkLog workLog) {
-        List<WorkLogEntryJson> items = new ArrayList<>();
+        List<WorkLogEntryJson> items = new ArrayList<WorkLogEntryJson>();
         for (WorkLogEntry entry : workLog) {
             items.add(new WorkLogEntryJson(entry.id(), entry.workload(), entry.projectName(), entry.employee(), entry.day()));
         }

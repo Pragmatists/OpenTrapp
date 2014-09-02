@@ -16,7 +16,7 @@ import static com.google.common.base.Predicates.*;
 
 public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
 
-    private List<WorkLogEntry> store = new ArrayList<>();
+    private List<WorkLogEntry> store = new ArrayList<WorkLogEntry>();
 
     @Override
     public WorkLog loadAll() {

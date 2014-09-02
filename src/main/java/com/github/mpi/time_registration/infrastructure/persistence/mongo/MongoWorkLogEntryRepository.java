@@ -5,10 +5,10 @@ import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.time.DisjointMonths;
 import com.github.mpi.time_registration.domain.time.Month;
 import com.github.mpi.time_registration.domain.time.Period;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -68,7 +68,7 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
 
         private ProjectName projectName;
 
-        private List<Interval> intervals = new ArrayList<>();
+        private List<Interval> intervals = new ArrayList<Interval>();
 
         @Override
         public Iterator<WorkLogEntry> iterator() {
@@ -93,7 +93,7 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
             if (intervals.isEmpty()) {
                 return new Criteria();
             }
-            List<Criteria> dateCriteria = new ArrayList<>();
+            List<Criteria> dateCriteria = new ArrayList<Criteria>();
             for (Interval interval : intervals) {
                 Criteria criteria = Criteria.where("day.date");
                 criteria.gte(interval.start.toString());
@@ -124,14 +124,14 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
                 DisjointMonths disjointMonths = (DisjointMonths) period;
                 intervals.addAll(getIntervals(disjointMonths));
             } else {
-                throw new NotImplementedException();
+                throw new IllegalArgumentException("Not implemented!");
             }
             return this;
         }
     }
 
     private ArrayList<Interval> getIntervals(DisjointMonths disjointMonths) {
-        ArrayList<Interval> intervals = new ArrayList<>();
+        ArrayList<Interval> intervals = new ArrayList<Interval>();
         for (Month month : disjointMonths.getMonths()) {
             intervals.add(new Interval(month.firstDay(), month.lastDay()));
         }

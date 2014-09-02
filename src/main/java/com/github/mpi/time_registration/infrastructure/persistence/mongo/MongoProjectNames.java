@@ -38,7 +38,7 @@ public class MongoProjectNames implements ProjectNames {
 
         MapReduceResults<DBObject> results = mongo.mapReduce("workLogEntry", mapJS, reduceJS, DBObject.class);
         
-        List<ProjectName> projectNames = new ArrayList<>();
+        List<ProjectName> projectNames = new ArrayList<ProjectName>();
         
         for (DBObject o : results) {
            projectNames.add(new ProjectName(o.get("_id").toString()));

@@ -44,7 +44,7 @@ public class UpdatingFixture extends ApiFixture {
 
     public List<Entry> allWorkLogEntries() throws IllegalAccessException {
 
-        List<Entry> entries = new ArrayList<>();
+        List<Entry> entries = new ArrayList<Entry>();
 
         for (WorkLogEntry entry : repository.loadAll()) {
             String id = entry.id().toString();

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class DisjointMonths implements Period {
-    List<Month> months = new ArrayList<>();
+    List<Month> months = new ArrayList<Month>();
 
     @Override
     public boolean contains(Day day) {
