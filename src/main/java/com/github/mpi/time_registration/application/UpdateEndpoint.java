@@ -29,6 +29,7 @@ import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository.WorkLogEntryDoesNotExists;
 import com.github.mpi.time_registration.domain.Workload;
+import com.github.mpi.time_registration.infrastructure.persistence.mongo.UnitOfWork;
 
 @Controller
 public class UpdateEndpoint {
@@ -36,6 +37,9 @@ public class UpdateEndpoint {
     @Autowired
     private UpdateService service;
 
+    @Autowired
+    private UnitOfWork unitOfWork;
+    
     @Autowired
     private WorkLogEntryRepository repository;
     
@@ -52,6 +56,8 @@ public class UpdateEndpoint {
         
         service.updateWorkLogEntry(new EntryID(id), workload, projectName);
 
+        unitOfWork.commit();
+        
         setLocation(response, "/endpoints/v1/work-log/entries/%s", id);
         
         return "{\"status\": \"sucess\"}";

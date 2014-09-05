@@ -20,10 +20,19 @@ public class MongoPersistenceBoundedContext implements PersistenceBoundedContext
     @Autowired
     private MongoTemplate mongo;
 
+    @Autowired
+    private UnitOfWork unitOfWork;
+
+    @Bean
+    @Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
+    public UnitOfWork unitOfWork(){
+        return new UnitOfWork(mongo);
+    }
+    
     @Bean
     @Scope(value="prototype", proxyMode=ScopedProxyMode.INTERFACES)
     public WorkLogEntryRepository repository(){
-        return new MongoWorkLogEntryRepository(mongo);
+        return new UnitOfWorkAwareRepository(new MongoWorkLogEntryRepository(mongo), unitOfWork);
     }
 
     @Bean
