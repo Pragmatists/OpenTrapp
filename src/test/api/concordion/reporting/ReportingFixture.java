@@ -1,5 +1,6 @@
 package concordion.reporting;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import support.ApiFixture;
@@ -18,11 +19,13 @@ public class ReportingFixture extends ApiFixture {
     private WorkLogEntryRepository repository;
 
     public void workLogEntry(String id, String workload, String projectName, String employee, String day) {
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), new EmployeeID(employee), Day.of(day)));
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), new EmployeeID(employee), Day.of(day),
+                DateTime.now()));
     }
 
     public void workLogEntry(String id, String workload, String projectName, String employee) {
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), new EmployeeID(employee), Day.of("2014/01/01")));
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), new EmployeeID(employee), Day.of("2014/01/01"),
+                DateTime.now()));
     }
     
 }

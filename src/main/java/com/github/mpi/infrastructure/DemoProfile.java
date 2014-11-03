@@ -3,6 +3,8 @@ package com.github.mpi.infrastructure;
 import com.github.mpi.time_registration.domain.*;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.time.Day;
+
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -41,7 +43,7 @@ public class DemoProfile {
             EmployeeID employeeID = new EmployeeID(random(employees));
             Day day = Day.of(String.format(dayPattern, random.nextInt(20) + 1));
             
-            repository.store(new WorkLogEntry(id, workload, projectName, employeeID, day));
+            repository.store(new WorkLogEntry(id, workload, projectName, employeeID, day, DateTime.now()));
         }
 
     }

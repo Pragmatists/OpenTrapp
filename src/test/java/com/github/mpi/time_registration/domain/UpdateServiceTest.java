@@ -3,6 +3,7 @@ package com.github.mpi.time_registration.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,7 +72,8 @@ public class UpdateServiceTest {
     
     private WorkLogEntry existingEntryFor(EntryID entryID) {
         
-        WorkLogEntry entry = new WorkLogEntry(entryID, Workload.of("1h"), new ProjectName("SomeProject"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+        WorkLogEntry entry = new WorkLogEntry(entryID, Workload.of("1h"), new ProjectName("SomeProject"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"),
+                DateTime.now());
         when(repository.load(entryID)).thenReturn(entry);
         return entry;
     }

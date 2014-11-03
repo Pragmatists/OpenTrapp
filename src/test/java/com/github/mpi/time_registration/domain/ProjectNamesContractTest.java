@@ -2,6 +2,7 @@ package com.github.mpi.time_registration.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
@@ -59,6 +60,7 @@ public abstract class ProjectNamesContractTest {
     }
 
     private WorkLogEntry worklogEntryFor(String name, String day) {
-        return new WorkLogEntry(new EntryID("WL." + id++), Workload.of("1h"), new ProjectName(name), new EmployeeID("homer.simpson"), Day.of(day));
+        return new WorkLogEntry(new EntryID("WL." + id++), Workload.of("1h"), new ProjectName(name), new EmployeeID("homer.simpson"), Day.of(day),
+                DateTime.now());
     }
 }

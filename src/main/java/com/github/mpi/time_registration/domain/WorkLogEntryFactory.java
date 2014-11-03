@@ -1,5 +1,7 @@
 package com.github.mpi.time_registration.domain;
 
+import org.joda.time.DateTime;
+
 import com.github.mpi.time_registration.domain.time.Day;
 
 public class WorkLogEntryFactory {
@@ -13,12 +15,14 @@ public class WorkLogEntryFactory {
     }
 
     public WorkLogEntry newEntry(String workload, String projectName) {
-        return new WorkLogEntry(sequence.nextID(), Workload.of(workload), new ProjectName(projectName), employeeContext.employeeID(), null);
+        return new WorkLogEntry(sequence.nextID(), Workload.of(workload), new ProjectName(projectName), employeeContext.employeeID(), null,
+                DateTime.now());
         
     }
 
     public WorkLogEntry newEntry(String workload, String projectName, String day) {
-        return new WorkLogEntry(sequence.nextID(), Workload.of(workload), new ProjectName(projectName), employeeContext.employeeID(), Day.of(day));
+        return new WorkLogEntry(sequence.nextID(), Workload.of(workload), new ProjectName(projectName), employeeContext.employeeID(),
+                Day.of(day), DateTime.now());
     }
     
 }

@@ -3,6 +3,7 @@ package com.github.mpi.time_registration.domain;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +46,8 @@ public class RegistrationServiceTest {
     // --
     
     private WorkLogEntry aWorkLogEntry() {
-        return new WorkLogEntry(new EntryID("id"), Workload.of("1h"), new ProjectName("stuff"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+        return new WorkLogEntry(new EntryID("id"), Workload.of("1h"), new ProjectName("stuff"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"),
+                DateTime.now());
     }
 
     private WorkLogEntry newEntryFor(String workload, String projectName, String day) {

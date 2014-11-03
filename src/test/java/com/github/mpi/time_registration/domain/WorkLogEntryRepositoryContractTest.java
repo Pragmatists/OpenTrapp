@@ -4,6 +4,8 @@ import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository.WorkLogEntryAlreadyExists;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository.WorkLogEntryDoesNotExists;
 import com.github.mpi.time_registration.domain.time.Day;
+
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import static com.googlecode.catchexception.CatchException.catchException;
@@ -31,13 +33,29 @@ public abstract class WorkLogEntryRepositoryContractTest {
     
         // given:
         EntryID id = entryID("entry-id");
-        WorkLogEntry entry = new WorkLogEntry(id, Workload.of("25m"), new ProjectName("Manhattan"), new EmployeeID("homer.simpson"), Day.of("2014/03/14"));
+        WorkLogEntry entry = new WorkLogEntry(id, Workload.of("25m"), new ProjectName("Manhattan"), new EmployeeID("homer.simpson"), Day.of("2014/03/14"),
+                DateTime.now());
     
         // when:
         repository.store(entry);
     
         // then:
         assertThat(reflectionEquals(entry, repository.load(id))).isTrue();
+    }
+
+    @Test
+    public void shouldStoreEntryWithCreationDate() throws Exception {
+        // given:
+        EntryID id = entryID("entry-id");
+        DateTime creationDate = DateTime.now();
+        WorkLogEntry entry = new WorkLogEntry(id, Workload.of("25m"), new ProjectName("Manhattan"), new EmployeeID("homer.simpson"), Day.of("2014/03/14"),
+                creationDate);
+
+        // when:
+        repository.store(entry);
+
+        // then:
+        assertThat(repository.load(id).createdAt()).isEqualTo(creationDate);
     }
 
     @Test
@@ -119,7 +137,8 @@ public abstract class WorkLogEntryRepositoryContractTest {
     }
 
     private WorkLogEntry newEntryWithId(EntryID id) {
-        return new WorkLogEntry(id, Workload.of("66h"), new ProjectName("doesn't matter"), new EmployeeID("homer.simpson"), null);
+        return new WorkLogEntry(id, Workload.of("66h"), new ProjectName("doesn't matter"), new EmployeeID("homer.simpson"), null,
+                DateTime.now());
     }
 
     private EntryID entryID(String id) {

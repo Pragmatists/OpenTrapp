@@ -2,6 +2,7 @@ package com.github.mpi.time_registration.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
@@ -13,7 +14,7 @@ public class WorkLogEntryTest {
     public void shouldUpdateWorkload() throws Exception {
 
         // given:
-        WorkLogEntry entry = new WorkLogEntry(null, Workload.of("10h"), null, null, null);
+        WorkLogEntry entry = new WorkLogEntry(null, Workload.of("10h"), null, null, null, DateTime.now());
         
         // when:
         entry.updateWorkload(Workload.of("12h"));
@@ -26,7 +27,7 @@ public class WorkLogEntryTest {
     public void shouldChangeProject() throws Exception {
         
         // given:
-        WorkLogEntry entry = new WorkLogEntry(null, null, new ProjectName("OldProject"), null, null);
+        WorkLogEntry entry = new WorkLogEntry(null, null, new ProjectName("OldProject"), null, null, DateTime.now());
         
         // when:
         entry.changeProjectTo(new ProjectName("NewProject"));
@@ -111,7 +112,8 @@ public class WorkLogEntryTest {
     }
     
     private WorkLogEntry entryOfID(String id) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("30m"), project("project-A"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+        return new WorkLogEntry(new EntryID(id), Workload.of("30m"), project("project-A"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"),
+                DateTime.now());
     }
 }
 

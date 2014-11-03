@@ -2,6 +2,7 @@ package com.github.mpi.time_registration.infrastructure.persistence.transients;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.github.mpi.time_registration.domain.EmployeeID;
@@ -102,7 +103,8 @@ public abstract class UnitOfWorkContractTest {
     }
 
     private WorkLogEntry aWorkLogEntry(EntryID entryID) {
-        return new WorkLogEntry(entryID, Workload.of("10m"), new ProjectName("project"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+        return new WorkLogEntry(entryID, Workload.of("10m"), new ProjectName("project"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"),
+                DateTime.now());
     }
 
     private WorkLogEntry reload(EntryID entryID) {

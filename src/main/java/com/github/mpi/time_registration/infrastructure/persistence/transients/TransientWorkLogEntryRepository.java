@@ -14,6 +14,8 @@ import java.util.List;
 
 import static com.google.common.base.Predicates.*;
 
+import org.joda.time.DateTime;
+
 public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
 
     private List<WorkLogEntry> store = new ArrayList<WorkLogEntry>();

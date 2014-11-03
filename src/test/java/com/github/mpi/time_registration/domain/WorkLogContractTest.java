@@ -2,6 +2,7 @@ package com.github.mpi.time_registration.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
@@ -135,7 +136,8 @@ public abstract class WorkLogContractTest {
     // --
     
     private WorkLogEntry anEntryOnDay(String id, Day day) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID("Lovelas"), day);
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID("Lovelas"), day,
+                DateTime.now());
         
     }
 
@@ -146,11 +148,13 @@ public abstract class WorkLogContractTest {
     }
 
     private WorkLogEntry anEntryForEmployee(String id, String employee) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID(employee), Day.of("2014/01/01"));
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID(employee), Day.of("2014/01/01"),
+                DateTime.now());
     }
 
     private WorkLogEntry anEntryForEmployeeAndProject(String id, String employee, String projectName) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName(projectName), new EmployeeID(employee), Day.of("2014/01/01"));
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName(projectName), new EmployeeID(employee), Day.of("2014/01/01"),
+                DateTime.now());
     }
 
     private WorkLogEntry anEntryWithProject(String id, String projectName) {
@@ -160,7 +164,8 @@ public abstract class WorkLogContractTest {
     }
 
     private WorkLogEntry anEntry(String id) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"),
+                DateTime.now());
     }
 
 }

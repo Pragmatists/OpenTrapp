@@ -6,6 +6,8 @@ import com.github.mpi.time_registration.domain.time.Day;
 import com.github.mpi.users_and_access.infrastructure.mock.MockOpenIDServer;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.filter.session.SessionFilter;
+
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import support.ApiFixture;
 
@@ -47,7 +49,8 @@ public class AuthorizationFixture extends ApiFixture {
     }
     
     public void workLogEntryFor(String id, String employee){
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of("12m"), new ProjectName("p"), new EmployeeID(employee), Day.of("2014/02/12")));
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of("12m"), new ProjectName("p"), new EmployeeID(employee), Day.of("2014/02/12"),
+                DateTime.now()));
     }
     
     public void loggedInAs(String username) throws UnsupportedEncodingException{

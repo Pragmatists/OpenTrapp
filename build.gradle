@@ -23,7 +23,8 @@ repositories {
 ext {
     springVersion = '3.2.8.RELEASE'
     springSecurityVersion = '3.1.0.RELEASE'
-    springDataVersion = '1.0.4.RELEASE'
+    springDataMongoVersion = '1.6.0.RELEASE'
+    springDataCommonsVersion = '1.4.1.RELEASE'
     jacksonVersion = '1.9.12'
     jettyVersion = '7.6.0.v20120127'
 }
@@ -69,10 +70,12 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.0.5'
     compile 'com.google.guava:guava:r09'
     compile 'org.apache.commons:commons-lang3:3.0'
-        
+    compile 'joda-time:joda-time:2.2'
+
     
     compile 'org.mongodb:mongo-java-driver:2.9.1'
-    compile "org.springframework.data:spring-data-mongodb:$springDataVersion"
+    compile "org.springframework.data:spring-data-mongodb:$springDataMongoVersion"
+    compile "org.springframework.data:spring-data-commons:$springDataCommonsVersion"
     compile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.28'
     
     testCompile 'junit:junit:4.11'

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import support.ApiFixture;
@@ -26,11 +27,11 @@ public class UpdatingFixture extends ApiFixture {
     }
     
     public void workLogEntry(String id, String workload, String projectName) {
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), null, null));
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), null, null, DateTime.now()));
     }
     
     public void workLogEntry(String id) {
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of("5h"), new ProjectName("some"), null, null));
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of("5h"), new ProjectName("some"), null, null, DateTime.now()));
     }
     
     public boolean entryExists(String id) {

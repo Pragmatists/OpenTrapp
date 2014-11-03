@@ -6,6 +6,7 @@ import com.github.mpi.time_registration.domain.time.DisjointMonths;
 import com.github.mpi.time_registration.domain.time.Month;
 import com.github.mpi.time_registration.domain.time.Period;
 
+import org.joda.time.DateTime;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;

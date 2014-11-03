@@ -1,5 +1,7 @@
 package com.github.mpi.time_registration.domain;
 
+import org.joda.time.DateTime;
+
 import com.github.mpi.time_registration.domain.time.Day;
 
 public class WorkLogEntry {
@@ -11,12 +13,15 @@ public class WorkLogEntry {
     private Workload workload;
     private ProjectName projectName;
 
-    public WorkLogEntry(EntryID id, Workload workload, ProjectName projectName, EmployeeID employeeID, Day day) {
+    private DateTime createdAt;
+
+    public WorkLogEntry(EntryID id, Workload workload, ProjectName projectName, EmployeeID employeeID, Day day, DateTime createdAt) {
         this.id = id;
         this.workload = workload;
         this.projectName = projectName;
         this.employeeID = employeeID;
         this.day = day;
+        this.createdAt = createdAt;
     }
 
     public EntryID id() {
@@ -62,6 +67,10 @@ public class WorkLogEntry {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    public DateTime createdAt() {
+        return createdAt;
     }
 
     public static class EntryID {
