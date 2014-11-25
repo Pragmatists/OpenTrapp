@@ -1,5 +1,7 @@
 package com.github.mpi.time_registration.domain;
 
+import java.util.Date;
+
 import com.github.mpi.time_registration.domain.time.Day;
 
 public class WorkLogEntry {
@@ -10,6 +12,9 @@ public class WorkLogEntry {
     
     private Workload workload;
     private ProjectName projectName;
+    
+    @SuppressWarnings("unused") // convinient for external systems 
+    private Date createdAt = new Date();
 
     public WorkLogEntry(EntryID id, Workload workload, ProjectName projectName, EmployeeID employeeID, Day day) {
         this.id = id;
