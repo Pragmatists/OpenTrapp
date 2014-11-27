@@ -8,5 +8,6 @@
     <context:component-scan base-package="com.github.mpi.infrastructure"/>
     <context:component-scan base-package="com.github.mpi.time_registration.application"/>
     <context:component-scan base-package="com.github.mpi.time_registration.infrastructure"/>
-
+    <context:component-scan base-package="com.github.mpi.time_registration.infrastructure.persistence.mongo"/>
+    <context:component-scan base-package="com.github.mpi.time_registration.infrastructure.persistence.transients"/>    
 </beans>
