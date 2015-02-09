@@ -1,3 +1,5 @@
 language: java
+before_install:
+ - chmod +x gradlew
 install:
-  - gradle clean test
+  - ./gradlew clean test
