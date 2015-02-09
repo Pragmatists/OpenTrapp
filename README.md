@@ -9,7 +9,7 @@ Open Time Registration Application
 ```
   gradle clean test
 ```
-Unitll https://github.com/Pragmatists/OpenTrapp/issues/73 is fixed use Java 7 for building project.
+Unitll https://github.com/Pragmatists/OpenTrapp/issues/73 is not fixed, use Java 7 for building project.
 ## Starting server:
 ```
   gradle jettyRun -Dspring.profiles.active={profilesToActivate}
