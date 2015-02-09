@@ -23,10 +23,6 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>OldTimes</td>
-                                <td>2013/12/24</td>
-                            </tr>
-                            <tr>
                                 <td>ProjectManhattan</td>
                                 <td>2014/01/10</td>
                             </tr>
@@ -44,9 +40,10 @@
                 <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/projects/</code></li>
                 <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
                 <li>And response should look like:
-<pre concordion:assertEquals="response()">[
-    "ProjectManhattan", "ApolloProgram"
-]</pre> 
+                <pre concordion:assertEquals="response()">[
+    "ApolloProgram",
+    "ProjectManhattan"
+]</pre>
                 </li>
             </ul>
         </div>
