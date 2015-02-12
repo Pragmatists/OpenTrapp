@@ -1,10 +1,11 @@
 package com.github.mpi.time_registration.application;
 
-import com.github.mpi.time_registration.domain.*;
-import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.time.Day;
-import com.github.mpi.time_registration.domain.time.Month;
-import com.github.mpi.time_registration.domain.time.Periods;
+import static ch.lambdaj.Lambda.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import com.github.mpi.time_registration.domain.EmployeeID;
+import com.github.mpi.time_registration.domain.ProjectName;
+import com.github.mpi.time_registration.domain.WorkLog;
+import com.github.mpi.time_registration.domain.WorkLogEntry;
+import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+import com.github.mpi.time_registration.domain.Workload;
+import com.github.mpi.time_registration.domain.time.Day;
+import com.github.mpi.time_registration.domain.time.Month;
+import com.github.mpi.time_registration.domain.time.Periods;
 
 @Controller
 @RequestMapping(method = GET,
@@ -68,7 +75,7 @@ public class ReportingEndpoint {
     private WorkLogJson jsonResponse(WorkLog workLog) {
         List<WorkLogEntryJson> items = new ArrayList<WorkLogEntryJson>();
         for (WorkLogEntry entry : workLog) {
-            items.add(new WorkLogEntryJson(entry.id(), entry.workload(), entry.projectName(), entry.employee(), entry.day()));
+            items.add(new WorkLogEntryJson(entry.id(), entry.workload(), entry.projectNames(), entry.employee(), entry.day()));
         }
         return new WorkLogJson(items);
     }
@@ -86,12 +93,14 @@ public class ReportingEndpoint {
     @JsonAutoDetect(fieldVisibility = Visibility.ANY)
     class WorkLogEntryJson {
 
-        String link, id, workload, projectName, employee, day;
+        String link, id, workload, employee, day;
 
-        WorkLogEntryJson(EntryID id, Workload workload, ProjectName projectName, EmployeeID employee, Day day) {
+        Iterable<String> projectNames;
+
+        WorkLogEntryJson(EntryID id, Workload workload, Iterable<ProjectName> projectNames, EmployeeID employee, Day day) {
             this.id = id.toString();
             this.workload = workload.toString();
-            this.projectName = projectName.toString();
+            this.projectNames = extract(projectNames, on(ProjectName.class).toString());
             this.employee = employee.toString();
             this.link = String.format("/endpoints/v1/work-log/entries/%s", id);
             this.day = day.toString();

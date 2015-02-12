@@ -1,5 +1,6 @@
 package com.github.mpi.time_registration.domain;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +36,7 @@ public class WorkLogEntryFactoryTest {
         WorkLogEntry workLogEntry = factory.newEntry("2h 13m", "ProjectManhattan");
         
         // then:
-        assertThat(workLogEntry.projectName()).isEqualTo(new ProjectName("ProjectManhattan"));
+        assertThat(workLogEntry.projectNames()).isEqualTo(asList(new ProjectName("ProjectManhattan")));
         assertThat(workLogEntry.workload()).isEqualTo(Workload.of("2h 13m"));
     }
 
@@ -70,7 +71,7 @@ public class WorkLogEntryFactoryTest {
         
         // given:
         // when:
-        WorkLogEntry entry = factory.newEntry("1h", "ProjectManhattan", "2013/11/05");
+        WorkLogEntry entry = factory.newEntry("1h", asList("ProjectManhattan"), "2013/11/05");
         
         // then:
         assertThat(entry.day()).isEqualTo(Day.of("2013/11/05"));

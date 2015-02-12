@@ -1,18 +1,20 @@
 package concordion.updating;
 
+import static com.google.inject.internal.Join.*;
+import static java.util.Arrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import support.ApiFixture;
 
 import com.github.mpi.time_registration.domain.ProjectName;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import com.github.mpi.time_registration.domain.Workload;
+
+import support.ApiFixture;
 
 public class UpdatingFixture extends ApiFixture {
 
@@ -21,16 +23,16 @@ public class UpdatingFixture extends ApiFixture {
 
     public void successfulRequest(){
         workLogEntry("WL.0001", "1h", "SomeName");
-        body("{\"projectName\":\"NewName\"}");
+        body("{\"projectNames\":[\"NewName\"]}");
         request("POST", "/endpoints/v1/work-log/entries/WL.0001");
     }
     
     public void workLogEntry(String id, String workload, String projectName) {
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), null, null));
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), asList(new ProjectName(projectName)), null, null));
     }
     
     public void workLogEntry(String id) {
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of("5h"), new ProjectName("some"), null, null));
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of("5h"), asList(new ProjectName("some")), null, null));
     }
     
     public boolean entryExists(String id) {
@@ -48,8 +50,8 @@ public class UpdatingFixture extends ApiFixture {
 
         for (WorkLogEntry entry : repository.loadAll()) {
             String id = entry.id().toString();
-            String workload = FieldUtils.readDeclaredField(entry, "workload", true).toString();
-            String project = FieldUtils.readDeclaredField(entry, "projectName", true).toString();
+            String workload = entry.workload().toString();
+            String project = join(",", entry.projectNames());
             entries.add(new Entry(id, project, workload));
         }
 
@@ -59,12 +61,12 @@ public class UpdatingFixture extends ApiFixture {
     public class Entry {
 
         public String id;
-        public String projectName;
+        public String projectNames;
         public String workload;
 
-        public Entry(String id, String project, String workload) {
+        public Entry(String id, String projects, String workload) {
             this.id = id;
-            this.projectName = project;
+            this.projectNames = projects;
             this.workload = workload;
         }
     }

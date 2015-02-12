@@ -9,6 +9,7 @@ import com.github.mpi.time_registration.domain.ProjectNames;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import com.github.mpi.time_registration.domain.time.Day;
+import com.google.common.collect.Iterables;
 
 public class TransientProjectNames implements ProjectNames {
 
@@ -25,7 +26,7 @@ public class TransientProjectNames implements ProjectNames {
         Set<ProjectName> projectNames = new HashSet<ProjectName>();
         for (WorkLogEntry w : repository.loadAll()) {
             if(w.day().after(after)){
-                projectNames.add(w.projectName());
+                Iterables.addAll(projectNames, w.projectNames());
             }
         }
         return projectNames.iterator();

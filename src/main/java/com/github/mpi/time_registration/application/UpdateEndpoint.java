@@ -1,12 +1,9 @@
 package com.github.mpi.time_registration.application;
 
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
-import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static ch.lambdaj.Lambda.*;
+import static javax.servlet.http.HttpServletResponse.*;
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,6 +28,8 @@ import com.github.mpi.time_registration.domain.WorkLogEntryRepository.WorkLogEnt
 import com.github.mpi.time_registration.domain.Workload;
 import com.github.mpi.time_registration.infrastructure.persistence.mongo.UnitOfWork;
 
+import ch.lambdaj.function.convert.Converter;
+
 @Controller
 public class UpdateEndpoint {
 
@@ -52,9 +51,15 @@ public class UpdateEndpoint {
     public @ResponseBody String updateEntry(HttpServletResponse response, @PathVariable String id, @RequestBody Form form){
 
         Workload workload = form.workload == null ? null : Workload.of(form.workload);
-        ProjectName projectName = form.projectName == null ? null : new ProjectName(form.projectName);
-        
-        service.updateWorkLogEntry(new EntryID(id), workload, projectName);
+        Iterable<ProjectName> projectNames = form.projectNames == null ? null : convert(form.projectNames,
+                new Converter<String, ProjectName>() {
+                    @Override
+                    public ProjectName convert(String name) {
+                        return new ProjectName(name);
+                    }
+                });
+
+        service.updateWorkLogEntry(new EntryID(id), workload, projectNames);
 
         unitOfWork.commit();
         
@@ -75,7 +80,7 @@ public class UpdateEndpoint {
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
     public static class Form{
         String workload;
-        String projectName;
+        String[] projectNames;
     }
     
     @ExceptionHandler(Exception.class)

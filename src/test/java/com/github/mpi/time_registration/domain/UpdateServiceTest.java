@@ -1,5 +1,6 @@
 package com.github.mpi.time_registration.domain;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -36,7 +37,7 @@ public class UpdateServiceTest {
         
         // then:
         assertThat(entry.workload()).isEqualTo(Workload.of("8h"));
-        assertThat(entry.projectName()).isNotNull();
+        assertThat(entry.projectNames()).isNotNull();
     }
 
     @Test
@@ -46,11 +47,11 @@ public class UpdateServiceTest {
         WorkLogEntry entry = existingEntryFor(new EntryID("entry-id"));
         
         // when:
-        service.updateWorkLogEntry(new EntryID("entry-id"), null, new ProjectName("NewProject"));
+        service.updateWorkLogEntry(new EntryID("entry-id"), null, asList(new ProjectName("NewProject")));
         
         // then:
-        assertThat(entry.projectName()).isEqualTo(new ProjectName("NewProject"));
-        assertThat(entry.workload()).isNotNull();;
+        assertThat(entry.projectNames()).isEqualTo(asList(new ProjectName("NewProject")));
+        assertThat(entry.workload()).isNotNull();
     }
     
     @Test
@@ -60,18 +61,19 @@ public class UpdateServiceTest {
         WorkLogEntry entry = existingEntryFor(new EntryID("entry-id"));
         
         // when:
-        service.updateWorkLogEntry(new EntryID("entry-id"), Workload.of("8h"), new ProjectName("NewProject"));
+        service.updateWorkLogEntry(new EntryID("entry-id"), Workload.of("8h"), asList(new ProjectName("NewProject")));
         
         // then:
         assertThat(entry.workload()).isEqualTo(Workload.of("8h"));
-        assertThat(entry.projectName()).isEqualTo(new ProjectName("NewProject"));
+        assertThat(entry.projectNames()).isEqualTo(asList(new ProjectName("NewProject")));
     }
     
     // --
     
     private WorkLogEntry existingEntryFor(EntryID entryID) {
         
-        WorkLogEntry entry = new WorkLogEntry(entryID, Workload.of("1h"), new ProjectName("SomeProject"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+        WorkLogEntry entry = new WorkLogEntry(entryID, Workload.of("1h"), asList(new ProjectName("SomeProject")),
+                new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
         when(repository.load(entryID)).thenReturn(entry);
         return entry;
     }

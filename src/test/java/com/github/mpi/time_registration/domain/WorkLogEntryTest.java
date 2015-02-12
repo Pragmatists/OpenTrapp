@@ -1,5 +1,6 @@
 package com.github.mpi.time_registration.domain;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
@@ -26,13 +27,13 @@ public class WorkLogEntryTest {
     public void shouldChangeProject() throws Exception {
         
         // given:
-        WorkLogEntry entry = new WorkLogEntry(null, null, new ProjectName("OldProject"), null, null);
+        WorkLogEntry entry = new WorkLogEntry(null, null, asList(new ProjectName("OldProject")), null, null);
         
         // when:
-        entry.changeProjectTo(new ProjectName("NewProject"));
+        entry.changeProjectsTo(asList(new ProjectName("NewProject")));
         
         // then:
-        assertThat(entry.projectName()).isEqualTo(new ProjectName("NewProject"));
+        assertThat(entry.projectNames()).isEqualTo(asList(new ProjectName("NewProject")));
     }
     
     @Test
@@ -111,7 +112,8 @@ public class WorkLogEntryTest {
     }
     
     private WorkLogEntry entryOfID(String id) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("30m"), project("project-A"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+        return new WorkLogEntry(new EntryID(id), Workload.of("30m"), asList(project("project-A")), new EmployeeID("homer.simpson"),
+                Day.of("2014/01/01"));
     }
 }
 

@@ -30,7 +30,7 @@
                             <tr>
                                 <th concordion:assertEquals="#entry.id">Id</th>
                                 <th concordion:assertEquals="#entry.workload">Workload</th>
-                                <th concordion:assertEquals="#entry.projectName">Project Name</th>
+                                <th concordion:assertEquals="#entry.projectNames">Project Names</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,7 +58,7 @@
                 already <span concordion:execute="workLogEntry(#id, #workload, #project)">exists</span></li>
                 <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.0006</code>
                 <li>And request body contains following data: <pre concordion:execute="body(#TEXT)">{
-    "projectName": "NewProject"
+    "projectNames": ["NewProject"]
 }
 </pre>
                 </li>
@@ -70,7 +70,7 @@
                             <tr>
                                 <th concordion:assertEquals="#entry.id">Id</th>
                                 <th concordion:assertEquals="#entry.workload">Workload</th>
-                                <th concordion:assertEquals="#entry.projectName">Project Name</th>
+                                <th concordion:assertEquals="#entry.projectNames">Project Names</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -117,7 +117,7 @@
                 <li>Given there are no entries</li>
                 <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.0404</code>
                 <li>And request body contains following data: <pre concordion:execute="body(#TEXT)">{
-    "projectName": "SomeProject"
+    "projectNames": ["SomeProject"]
 }
 </pre>
                 </li>

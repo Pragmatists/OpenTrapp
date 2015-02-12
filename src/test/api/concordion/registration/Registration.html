@@ -28,7 +28,7 @@
                 <li>
 <pre class="hide" concordion:execute="body(#TEXT)">{
     "workload": "1h 30m",
-    "projectName": "ApiDesign",
+    "projectNames": ["ApiDesign"],
     "day": "2014/01/01"
 }</pre>
                 </li>
@@ -51,7 +51,7 @@
                 <li>And the request body contains following data:
 <pre concordion:execute="body(#TEXT)">{
     "workload": "1h 30m",
-    "projectName": "ApiDesign",
+    "projectNames": ["ApiDesign", "Implementation"],
     "day": "2014/01/01"
 }
 </pre>
@@ -60,7 +60,7 @@
                     <table concordion:verifyRows="#entry : allWorkLogEntries()">
                         <thead>
                             <tr>
-                                <th concordion:assertEquals="#entry.project">Project</th>
+                                <th concordion:assertEquals="#entry.project">Projects</th>
                                 <th concordion:assertEquals="#entry.workload">Workload</th>
                                 <th concordion:assertEquals="#entry.employee">Employee</th>
                                 <th concordion:assertEquals="#entry.day">Day</th>
@@ -68,7 +68,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>ApiDesign</td>
+                                <td>ApiDesign,Implementation</td>
                                 <td>1h 30m</td>
                                 <td>Homer</td>
                                 <td>2014/01/01</td>

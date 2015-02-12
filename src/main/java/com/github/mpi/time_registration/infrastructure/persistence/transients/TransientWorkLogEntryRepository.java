@@ -1,18 +1,23 @@
 package com.github.mpi.time_registration.infrastructure.persistence.transients;
 
-import com.github.mpi.time_registration.domain.*;
-import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.time.Period;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterators;
+import static com.google.common.base.Predicates.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.google.common.base.Predicates.*;
+import com.github.mpi.time_registration.domain.EmployeeID;
+import com.github.mpi.time_registration.domain.ProjectName;
+import com.github.mpi.time_registration.domain.WorkLog;
+import com.github.mpi.time_registration.domain.WorkLogEntry;
+import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+import com.github.mpi.time_registration.domain.time.Period;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 
 public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
 
@@ -60,10 +65,10 @@ public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
 
     private final class TransientWorkLog implements WorkLog {
 
-        private final class ExtractProjectName implements Function<WorkLogEntry, ProjectName> {
+        private final class ExtractProjectNames implements Function<WorkLogEntry, Iterable<ProjectName>> {
             @Override
-            public ProjectName apply(WorkLogEntry x) {
-                return x.projectName();
+            public Iterable<ProjectName> apply(WorkLogEntry x) {
+                return x.projectNames();
             }
         }
 
@@ -82,8 +87,13 @@ public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
         }
 
         @Override
-        public WorkLog forProject(ProjectName projectName) {
-            addConstraint(compose(equalTo(projectName), new ExtractProjectName()));
+        public WorkLog forProject(final ProjectName projectName) {
+            addConstraint(compose(new Predicate<Iterable<ProjectName>>() {
+                @Override
+                public boolean apply(Iterable<ProjectName> input) {
+                    return Iterables.contains(input, projectName);
+                }
+            }, new ExtractProjectNames()));
             return this;
         }
 

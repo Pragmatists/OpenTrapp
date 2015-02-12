@@ -1,5 +1,6 @@
 package com.github.mpi.time_registration.application;
 
+import static java.util.Arrays.asList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -25,9 +26,9 @@ public class RegistrationEndpoint {
 
     @Autowired
     private ManualEmployeeContext context;
-    
+
     @RequestMapping(
-              method = POST, 
+              method = POST,
             consumes = "application/json",
                value = "/endpoints/v1/employee/{employeeID}/work-log/entries")
     @ResponseStatus(CREATED)
@@ -35,17 +36,17 @@ public class RegistrationEndpoint {
     public void submitEntry(@PathVariable String employeeID, @RequestBody Form form) {
 
         try{
-            
+
             context.enter(new EmployeeID(employeeID));
-            
-            service.submit(form.workload, form.projectName, form.day);
-                
+
+            service.submit(form.workload, form.projectNames == null ? null : asList(form.projectNames), form.day);
+
         } catch (IllegalArgumentException e) {
 
             throw new InvalidExpressionException(e);
-            
+
         } finally{
-            
+
             context.leave();
         }
     }
@@ -53,14 +54,15 @@ public class RegistrationEndpoint {
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
     public static class Form{
 
-        String projectName, workload, day;
+        String[] projectNames;
+        String workload, day;
     }
 
     @ResponseStatus(BAD_REQUEST)
     public class InvalidExpressionException extends IllegalArgumentException {
-        
+
         private static final long serialVersionUID = -981128848209981239L;
-        
+
         public InvalidExpressionException(Throwable cause) {
             super(cause);
         }

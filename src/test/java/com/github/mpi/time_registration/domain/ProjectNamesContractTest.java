@@ -1,5 +1,6 @@
 package com.github.mpi.time_registration.domain;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
@@ -59,6 +60,7 @@ public abstract class ProjectNamesContractTest {
     }
 
     private WorkLogEntry worklogEntryFor(String name, String day) {
-        return new WorkLogEntry(new EntryID("WL." + id++), Workload.of("1h"), new ProjectName(name), new EmployeeID("homer.simpson"), Day.of(day));
+        return new WorkLogEntry(new EntryID("WL." + id++), Workload.of("1h"), asList(new ProjectName(name)), new EmployeeID("homer" +
+                ".simpson"), Day.of(day));
     }
 }

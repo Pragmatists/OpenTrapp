@@ -1,14 +1,16 @@
 package concordion.registration;
 
+import static com.google.inject.internal.Join.join;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import support.ApiFixture;
-
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+
+import support.ApiFixture;
 
 public class RegistrationFixture extends ApiFixture {
 
@@ -26,10 +28,10 @@ public class RegistrationFixture extends ApiFixture {
 
         for (WorkLogEntry entry : repository.loadAll()) {
             String workload = "" + entry.workload();
-            String project = "" + entry.projectName();
+            String projects = join(",", entry.projectNames());
             String employee = "" + entry.employee();
             String day = "" + entry.day();
-            entries.add(new Entry(project, workload, employee, day));
+            entries.add(new Entry(projects, workload, employee, day));
         }
 
         return entries;

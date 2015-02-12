@@ -1,18 +1,20 @@
 package concordion.calendar;
 
+import static com.google.inject.internal.Join.*;
+import static java.util.Arrays.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import support.ApiFixture;
 
 import com.github.mpi.time_registration.domain.ProjectName;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import com.github.mpi.time_registration.domain.Workload;
+
+import support.ApiFixture;
 
 public class CalendarFixture extends ApiFixture {
 
@@ -26,7 +28,7 @@ public class CalendarFixture extends ApiFixture {
     }
     
     public void workLogEntry(String id, String workload, String projectName) {
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), null, null));
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), asList(new ProjectName(projectName)), null, null));
     }
 
     public List<Entry> allWorkLogEntries() throws IllegalAccessException {
@@ -35,8 +37,8 @@ public class CalendarFixture extends ApiFixture {
 
         for (WorkLogEntry entry : repository.loadAll()) {
             String id = entry.id().toString();
-            String workload = FieldUtils.readDeclaredField(entry, "workload", true).toString();
-            String project = FieldUtils.readDeclaredField(entry, "projectName", true).toString();
+            String workload = entry.workload().toString();
+            String project = join(",", entry.projectNames());
             entries.add(new Entry(id, project, workload));
         }
 

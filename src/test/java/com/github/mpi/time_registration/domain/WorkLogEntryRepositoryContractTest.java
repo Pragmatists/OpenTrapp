@@ -1,15 +1,16 @@
 package com.github.mpi.time_registration.domain;
 
+import static com.googlecode.catchexception.CatchException.*;
+import static java.util.Arrays.*;
+import static org.apache.commons.lang3.builder.EqualsBuilder.*;
+import static org.assertj.core.api.Assertions.*;
+
+import org.junit.Test;
+
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository.WorkLogEntryAlreadyExists;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository.WorkLogEntryDoesNotExists;
 import com.github.mpi.time_registration.domain.time.Day;
-import org.junit.Test;
-
-import static com.googlecode.catchexception.CatchException.catchException;
-import static com.googlecode.catchexception.CatchException.caughtException;
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class WorkLogEntryRepositoryContractTest {
 
@@ -31,7 +32,8 @@ public abstract class WorkLogEntryRepositoryContractTest {
     
         // given:
         EntryID id = entryID("entry-id");
-        WorkLogEntry entry = new WorkLogEntry(id, Workload.of("25m"), new ProjectName("Manhattan"), new EmployeeID("homer.simpson"), Day.of("2014/03/14"));
+        WorkLogEntry entry = new WorkLogEntry(id, Workload.of("25m"), asList(new ProjectName("Manhattan")),
+                new EmployeeID("homer.simpson"), Day.of("2014/03/14"));
     
         // when:
         repository.store(entry);
@@ -119,7 +121,7 @@ public abstract class WorkLogEntryRepositoryContractTest {
     }
 
     private WorkLogEntry newEntryWithId(EntryID id) {
-        return new WorkLogEntry(id, Workload.of("66h"), new ProjectName("doesn't matter"), new EmployeeID("homer.simpson"), null);
+        return new WorkLogEntry(id, Workload.of("66h"), asList(new ProjectName("doesn't matter")), new EmployeeID("homer.simpson"), null);
     }
 
     private EntryID entryID(String id) {

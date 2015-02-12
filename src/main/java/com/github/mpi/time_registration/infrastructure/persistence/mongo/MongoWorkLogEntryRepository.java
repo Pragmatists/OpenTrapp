@@ -1,18 +1,24 @@
 package com.github.mpi.time_registration.infrastructure.persistence.mongo;
 
-import com.github.mpi.time_registration.domain.*;
-import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.time.DisjointMonths;
-import com.github.mpi.time_registration.domain.time.Month;
-import com.github.mpi.time_registration.domain.time.Period;
+import static java.util.Arrays.asList;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import com.github.mpi.time_registration.domain.EmployeeID;
+import com.github.mpi.time_registration.domain.ProjectName;
+import com.github.mpi.time_registration.domain.WorkLog;
+import com.github.mpi.time_registration.domain.WorkLogEntry;
+import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+import com.github.mpi.time_registration.domain.time.DisjointMonths;
+import com.github.mpi.time_registration.domain.time.Month;
+import com.github.mpi.time_registration.domain.time.Period;
 
 public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
 
@@ -82,7 +88,7 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
                 criteria.and("employeeID").is(employeeID);
             }
             if (projectName != null) {
-                criteria.and("projectName").is(projectName);
+                criteria.and("projectNames").in(asList(projectName));
             }
             criteria.andOperator(getPeriodCriteria());
 

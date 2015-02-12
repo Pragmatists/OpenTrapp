@@ -1,18 +1,24 @@
 package com.github.mpi.infrastructure;
 
-import com.github.mpi.time_registration.domain.*;
-import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.time.Day;
+import static java.util.Arrays.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import com.github.mpi.time_registration.domain.EmployeeID;
+import com.github.mpi.time_registration.domain.ProjectName;
+import com.github.mpi.time_registration.domain.WorkLogEntry;
+import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+import com.github.mpi.time_registration.domain.Workload;
+import com.github.mpi.time_registration.domain.time.Day;
 
 @Component
 @Profile("demo")
@@ -26,9 +32,9 @@ public class DemoProfile {
     @PostConstruct
     void init(){
 
-        List<String> employees = Arrays.asList("homer.simpson", "bart.simpson", "marge.simpson", "principal.skinner", "mr.burns");
-        List<String> workloads = Arrays.asList("8h", "8h", "8h", "4h 15m", "2h 30m", "1d 2h", "45m", "1h", "6h 40m", "7h");
-        List<String> projects = Arrays.asList("ProjectManhattan", "ApolloProgram", "Internal", "Other");
+        List<String> employees = asList("homer.simpson", "bart.simpson", "marge.simpson", "principal.skinner", "mr.burns");
+        List<String> workloads = asList("8h", "8h", "8h", "4h 15m", "2h 30m", "1d 2h", "45m", "1h", "6h 40m", "7h");
+        List<String> projects = asList("ProjectManhattan", "ApolloProgram", "Internal", "Other");
         String workloadPattern = "WL.%s";
         String dayPattern =  new SimpleDateFormat("yyyy/MM").format(new Date()) + "/%02d";
         int worklogEntriesCount = 50;
@@ -41,7 +47,7 @@ public class DemoProfile {
             EmployeeID employeeID = new EmployeeID(random(employees));
             Day day = Day.of(String.format(dayPattern, random.nextInt(20) + 1));
             
-            repository.store(new WorkLogEntry(id, workload, projectName, employeeID, day));
+            repository.store(new WorkLogEntry(id, workload, asList(projectName), employeeID, day));
         }
 
     }

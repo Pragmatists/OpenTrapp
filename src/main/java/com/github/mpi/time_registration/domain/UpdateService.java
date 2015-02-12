@@ -10,15 +10,15 @@ public class UpdateService {
         this.repository = repository;
     }
 
-    public void updateWorkLogEntry(EntryID entryID, Workload workload, ProjectName projectName) {
+    public void updateWorkLogEntry(EntryID entryID, Workload workload, Iterable<ProjectName> projectNames) {
         
         WorkLogEntry entry = repository.load(entryID);
         
         if(workload != null){
             entry.updateWorkload(workload);
         }
-        if(projectName != null){
-            entry.changeProjectTo(projectName);
+        if(projectNames != null){
+            entry.changeProjectsTo(projectNames);
         }
         
     }

@@ -11,15 +11,15 @@ public class WorkLogEntry {
     private final Day day;
     
     private Workload workload;
-    private ProjectName projectName;
+    private Iterable<ProjectName> projectNames;
     
     @SuppressWarnings("unused") // convinient for external systems 
     private Date createdAt = new Date();
 
-    public WorkLogEntry(EntryID id, Workload workload, ProjectName projectName, EmployeeID employeeID, Day day) {
+    public WorkLogEntry(EntryID id, Workload workload, Iterable<ProjectName> projectNames, EmployeeID employeeID, Day day) {
         this.id = id;
         this.workload = workload;
-        this.projectName = projectName;
+        this.projectNames = projectNames;
         this.employeeID = employeeID;
         this.day = day;
     }
@@ -32,8 +32,8 @@ public class WorkLogEntry {
         return workload;
     }
 
-    public ProjectName projectName() {
-        return projectName;
+    public Iterable<ProjectName> projectNames() {
+        return projectNames;
     }
 
     public EmployeeID employee() {
@@ -48,8 +48,8 @@ public class WorkLogEntry {
         this.workload = newWorkload;
     }
 
-    public void changeProjectTo(ProjectName newProject) {
-        this.projectName = newProject;
+    public void changeProjectsTo(Iterable<ProjectName> newProjects) {
+        this.projectNames = newProjects;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.mpi.time_registration.domain;
 
+import static java.util.Arrays.asList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,7 +37,7 @@ public class RegistrationServiceTest {
         WorkLogEntry newEntry = newEntryFor("1h", "stuff", "2014/01/01");
         
         // when:
-        service.submit("1h", "stuff", "2014/01/01");
+        service.submit("1h", asList("stuff"), "2014/01/01");
         
         // then:
         verify(repository).store(newEntry);
@@ -45,12 +46,13 @@ public class RegistrationServiceTest {
     // --
     
     private WorkLogEntry aWorkLogEntry() {
-        return new WorkLogEntry(new EntryID("id"), Workload.of("1h"), new ProjectName("stuff"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+        return new WorkLogEntry(new EntryID("id"), Workload.of("1h"), asList(new ProjectName("stuff")), new EmployeeID("homer.simpson"),
+                Day.of("2014/01/01"));
     }
 
     private WorkLogEntry newEntryFor(String workload, String projectName, String day) {
         WorkLogEntry newWorkLogEntry = aWorkLogEntry();
-        when(factory.newEntry(workload, projectName, day)).thenReturn(newWorkLogEntry);
+        when(factory.newEntry(workload, asList(projectName), day)).thenReturn(newWorkLogEntry);
         return newWorkLogEntry;
     }
 }

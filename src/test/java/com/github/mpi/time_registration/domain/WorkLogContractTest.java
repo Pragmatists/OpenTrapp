@@ -1,5 +1,6 @@
 package com.github.mpi.time_registration.domain;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
@@ -135,7 +136,7 @@ public abstract class WorkLogContractTest {
     // --
     
     private WorkLogEntry anEntryOnDay(String id, Day day) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID("Lovelas"), day);
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), asList(new ProjectName("projectA")), new EmployeeID("Lovelas"), day);
         
     }
 
@@ -146,21 +147,24 @@ public abstract class WorkLogContractTest {
     }
 
     private WorkLogEntry anEntryForEmployee(String id, String employee) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID(employee), Day.of("2014/01/01"));
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), asList(new ProjectName("projectA")), new EmployeeID(employee),
+                Day.of("2014/01/01"));
     }
 
     private WorkLogEntry anEntryForEmployeeAndProject(String id, String employee, String projectName) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName(projectName), new EmployeeID(employee), Day.of("2014/01/01"));
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), asList(new ProjectName(projectName)), new EmployeeID(employee),
+                Day.of("2014/01/01"));
     }
 
     private WorkLogEntry anEntryWithProject(String id, String projectName) {
         WorkLogEntry entry = anEntry(id);
-        entry.changeProjectTo(new ProjectName(projectName));
+        entry.changeProjectsTo(asList(new ProjectName(projectName)));
         return entry;
     }
 
     private WorkLogEntry anEntry(String id) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), asList(new ProjectName("projectA")), new EmployeeID("homer.simpson"),
+                Day.of("2014/01/01"));
     }
 
 }

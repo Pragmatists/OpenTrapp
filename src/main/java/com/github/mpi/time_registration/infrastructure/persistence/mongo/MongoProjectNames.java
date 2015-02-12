@@ -27,8 +27,11 @@ public class MongoProjectNames implements ProjectNames {
 
         String mapJS =
                 "function () {"+
-                "    if(this.day.date >= '" + after.toString() + "')" +
-                "        emit(this.projectName.name, 1);" +
+                "   if(this.day.date >= '" + after.toString() + "') {" +
+                "       this.projectNames.forEach(function(projectName) {" +
+                "           emit(projectName.name, 1);" +
+                "       });" +
+                "   }" +
                 "}";
      
         String reduceJS = 

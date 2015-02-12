@@ -71,7 +71,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.0.5'
     compile 'com.google.guava:guava:r09'
     compile 'org.apache.commons:commons-lang3:3.0'
-        
+    compile 'com.googlecode.lambdaj:lambdaj:2.3.3'
     
     compile 'org.mongodb:mongo-java-driver:2.9.1'
     compile "org.springframework.data:spring-data-mongodb:$springDataVersion"

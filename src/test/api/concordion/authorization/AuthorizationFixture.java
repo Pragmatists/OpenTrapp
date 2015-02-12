@@ -1,16 +1,24 @@
 package concordion.authorization;
 
-import com.github.mpi.time_registration.domain.*;
+import static java.util.Arrays.*;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.github.mpi.time_registration.domain.EmployeeID;
+import com.github.mpi.time_registration.domain.ProjectName;
+import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+import com.github.mpi.time_registration.domain.Workload;
 import com.github.mpi.time_registration.domain.time.Day;
 import com.github.mpi.users_and_access.infrastructure.mock.MockOpenIDServer;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.filter.session.SessionFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import support.ApiFixture;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import support.ApiFixture;
 
 public class AuthorizationFixture extends ApiFixture {
 
@@ -47,7 +55,8 @@ public class AuthorizationFixture extends ApiFixture {
     }
     
     public void workLogEntryFor(String id, String employee){
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of("12m"), new ProjectName("p"), new EmployeeID(employee), Day.of("2014/02/12")));
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of("12m"), asList(new ProjectName("p")), new EmployeeID(employee),
+                Day.of("2014/02/12")));
     }
     
     public void loggedInAs(String username) throws UnsupportedEncodingException{
@@ -105,12 +114,12 @@ public class AuthorizationFixture extends ApiFixture {
     }
     
     public void validRegistration(String location){
-        body("{\"workload\": \"1h 30m\",\"projectName\": \"ApiDesign\",\"day\": \"2014/01/01\"}");
+        body("{\"workload\": \"1h 30m\",\"projectNames\": [\"ApiDesign\"],\"day\": \"2014/01/01\"}");
         post(location);
     }
     
     public void validUpdate(String location){
-        body("{\"projectName\": \"NewProject\"}");
+        body("{\"projectNames\": [\"NewProject\"]}");
         post(location);
     }
 }
