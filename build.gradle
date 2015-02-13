@@ -58,9 +58,7 @@ dependencies {
         compile "org.springframework:spring-$module:$springVersion"
     }
     ['core', 'web', 'config', 'openid'].each { module ->
-        compile ("org.springframework.security:spring-security-$module:$springSecurityVersion") {
-            exclude module: 'httpclient', group: 'org.apache.httpcomponents'
-        }
+        compile ("org.springframework.security:spring-security-$module:$springSecurityVersion")
     }
 
     compile ("org.springframework:spring-context:$springVersion"){
