@@ -4,39 +4,37 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserInfo {
-    private final String id;
-    private final String name;
-    private final String givenName;
-    private final String familyName;
-    private final String gender;
-    private final String picture;
-    private final String link;
-    private final String email;
-    private final boolean verifiedEmail;
-    private final String hd;
 
-    @JsonCreator
-    public UserInfo(@JsonProperty("id") String id,
-                    @JsonProperty("name") String name,
-                    @JsonProperty("given_name") String givenName,
-                    @JsonProperty("family_name") String familyName,
-                    @JsonProperty("gender") String gender,
-                    @JsonProperty("picture") String picture,
-                    @JsonProperty("link") String link,
-                    @JsonProperty("email") String email,
-                    @JsonProperty("verified_email") boolean verifiedEmail,
-                    @JsonProperty("hd") String hd) {
-        this.id = id;
-        this.name = name;
-        this.givenName = givenName;
-        this.familyName = familyName;
-        this.gender = gender;
-        this.picture = picture;
-        this.link = link;
-        this.email = email;
-        this.verifiedEmail = verifiedEmail;
-        this.hd = hd;
-    }
+    @JsonProperty("id")
+    private String id;
+    
+    @JsonProperty("name")
+    private String name;
+    
+    @JsonProperty("given_name")
+    private String givenName;
+    
+    @JsonProperty("family_name")
+    private String familyName;
+
+    @JsonProperty("gender")
+    private String gender;
+
+    @JsonProperty("picture")
+    private String picture;
+    
+    @JsonProperty("link")
+    private String link;
+    
+    @JsonProperty("email")
+    private String email;
+    
+    @JsonProperty("verified_email")
+    private boolean verifiedEmail;
+    
+    @JsonProperty("hd")
+    private String hd;
+
 
     public String getId() {
         return id;
