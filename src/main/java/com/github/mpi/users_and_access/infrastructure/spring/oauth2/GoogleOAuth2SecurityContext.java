@@ -72,6 +72,7 @@ public class GoogleOAuth2SecurityContext extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+            .csrf().disable()
             .addFilterAfter(oAuth2ClientContextFilter(), AbstractPreAuthenticatedProcessingFilter.class)
                 .addFilterAfter(openIdConnectAuthenticationFilter(), OAuth2ClientContextFilter.class)
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
