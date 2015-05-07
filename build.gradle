@@ -61,7 +61,7 @@ dependencies {
         compile ("org.springframework.security:spring-security-$module:$springSecurityVersion")
     }
     
-    //compile ("org.springframework.security:spring-security-oauth2:1.0.5.RELEASE")
+    compile ("org.springframework.security.oauth:spring-security-oauth2:2.0.7.RELEASE")
     
     compile ("org.springframework:spring-context:$springVersion"){
         exclude group: 'commons-logging', module: 'commons-logging'
