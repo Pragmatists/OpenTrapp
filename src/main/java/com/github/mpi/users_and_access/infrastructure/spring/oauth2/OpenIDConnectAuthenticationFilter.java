@@ -1,6 +1,5 @@
 package com.github.mpi.users_and_access.infrastructure.spring.oauth2;
 
-import static java.util.Optional.empty;
 import static org.springframework.security.core.authority.AuthorityUtils.NO_AUTHORITIES;
 
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationPro
             throws AuthenticationException, IOException, ServletException {
                 
         final ResponseEntity<UserInfo> userInfoResponseEntity = restTemplate.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);
-        Authentication preAuthenticationToken = new PreAuthenticatedAuthenticationToken(userInfoResponseEntity.getBody(), empty(), NO_AUTHORITIES);
+        Authentication preAuthenticationToken = new PreAuthenticatedAuthenticationToken(userInfoResponseEntity.getBody(), "", NO_AUTHORITIES);
         
         return getAuthenticationManager().authenticate(preAuthenticationToken);
     }
