@@ -37,7 +37,6 @@ public class UserInfo {
     @JsonProperty("hd")
     private String hd;
 
-
     public String getId() {
         return id;
     }
