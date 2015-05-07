@@ -21,8 +21,8 @@ repositories {
 }
 
 ext {
-    springVersion = '3.2.8.RELEASE'
-    springSecurityVersion = '3.1.0.RELEASE'
+    springVersion = '4.0.9.RELEASE'
+    springSecurityVersion = '3.2.6.RELEASE'
     springDataVersion = '1.0.4.RELEASE'
     jacksonVersion = '1.9.12'
     jettyVersion = '7.6.0.v20120127'
@@ -60,7 +60,9 @@ dependencies {
     ['core', 'web', 'config', 'openid'].each { module ->
         compile ("org.springframework.security:spring-security-$module:$springSecurityVersion")
     }
-
+    
+    //compile ("org.springframework.security:spring-security-oauth2:1.0.5.RELEASE")
+    
     compile ("org.springframework:spring-context:$springVersion"){
         exclude group: 'commons-logging', module: 'commons-logging'
     }
