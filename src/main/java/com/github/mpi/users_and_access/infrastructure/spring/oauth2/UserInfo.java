@@ -1,8 +1,10 @@
 package com.github.mpi.users_and_access.infrastructure.spring.oauth2;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonAutoDetect(fieldVisibility=Visibility.ANY)
 public class UserInfo {
 
     @JsonProperty("id")
@@ -30,7 +32,7 @@ public class UserInfo {
     private String email;
     
     @JsonProperty("verified_email")
-    private boolean verifiedEmail;
+    private Boolean verifiedEmail;
     
     @JsonProperty("hd")
     private String hd;
