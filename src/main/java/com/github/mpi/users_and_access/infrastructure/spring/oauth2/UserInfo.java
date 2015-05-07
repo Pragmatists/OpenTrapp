@@ -30,7 +30,7 @@ public class UserInfo {
     
     @JsonProperty("email")
     private String email;
-    
+                   
     @JsonProperty("verified_email")
     private Boolean verifiedEmail;
     
