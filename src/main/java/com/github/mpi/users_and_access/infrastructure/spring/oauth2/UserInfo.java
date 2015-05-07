@@ -1,8 +1,9 @@
 package com.github.mpi.users_and_access.infrastructure.spring.oauth2;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 public class UserInfo {
