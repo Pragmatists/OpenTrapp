@@ -75,9 +75,14 @@ public class GoogleOAuth2SecurityContext extends WebSecurityConfigurerAdapter{
             .addFilterAfter(oAuth2ClientContextFilter(), AbstractPreAuthenticatedProcessingFilter.class)
                 .addFilterAfter(openIdConnectAuthenticationFilter(), OAuth2ClientContextFilter.class)
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
-                .and().authorizeRequests()
-                .antMatchers("/endpoints/v1/authentication/**").permitAll()
-                .antMatchers("/**").authenticated();
+                .and()
+                .logout()
+                    .logoutSuccessHandler(new RedirectToStatus())
+                    .logoutUrl("/endpoints/v1/authentication/logout")
+                .and()
+                .authorizeRequests()
+                    .antMatchers("/endpoints/v1/authentication/**").permitAll()
+                    .antMatchers("/**").authenticated();
     }
     
 }

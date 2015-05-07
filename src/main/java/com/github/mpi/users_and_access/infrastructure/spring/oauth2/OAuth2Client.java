@@ -24,11 +24,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @Profile("google-security")
 public class OAuth2Client {
     
-//    @Value("${google.oauth2.clientId}")
-    private String clientId = "522512788382-fh0igheqfmt9snlfvnp2jcj5q8pncbip.apps.googleusercontent.com";
+    @Value("#{environment.OAUTH2_CLIENT_ID}")
+    private String clientId;
 
-//    @Value("${google.oauth2.clientSecret}")
-    private String clientSecret = "2hFFs-RS0FotWYtCWQAyRAzQ";
+    @Value("#{environment.OAUTH2_CLIENT_SECRET}")
+    private String clientSecret;
 
     @Bean
     // TODO retrieve from https://accounts.google.com/.well-known/openid-configuration ?

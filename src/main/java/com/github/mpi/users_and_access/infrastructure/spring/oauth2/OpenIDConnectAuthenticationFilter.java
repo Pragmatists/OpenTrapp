@@ -29,11 +29,7 @@ public class OpenIDConnectAuthenticationFilter extends AbstractAuthenticationPro
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException, ServletException {
-        
-        String resp = restTemplate.getForObject("https://www.googleapis.com/oauth2/v2/userinfo", String.class);
-        
-        System.err.println(resp);
-        
+                
         final ResponseEntity<UserInfo> userInfoResponseEntity = restTemplate.getForEntity("https://www.googleapis.com/oauth2/v2/userinfo", UserInfo.class);
         Authentication preAuthenticationToken = new PreAuthenticatedAuthenticationToken(userInfoResponseEntity.getBody(), empty(), NO_AUTHORITIES);
         
