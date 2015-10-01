@@ -32,7 +32,7 @@ public class EmbeddedServer {
         
 //        System.setProperty("spring.profiles.active","mock-security,transients");            // aceptance-tests
 //        System.setProperty("spring.profiles.active","mongo,mongo-lab,spring-security");   // test
-        System.setProperty("spring.profiles.active","transients,mock-security");   // test
+        System.setProperty("spring.profiles.active","transients,google-security");   // test
 //        System.setProperty("spring.profiles.active","spring-security,transients");        // dev
 
         System.err.println("-------------------------------");
