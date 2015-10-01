@@ -3,13 +3,14 @@ buildscript{
         mavenCentral()
     }
     dependencies {
-        classpath 'org.ajoberstar:gradle-git:0.6.3'
+        classpath 'org.ajoberstar:gradle-git:1.1.0'
     }
 }
 
 apply plugin: 'war'
 apply plugin: 'jetty'
-apply plugin: 'github-pages'
+apply plugin: 'org.ajoberstar.github-pages'
+apply plugin: 'java'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.9'
@@ -23,9 +24,10 @@ repositories {
 ext {
     springVersion = '3.2.8.RELEASE'
     springSecurityVersion = '3.1.0.RELEASE'
-    springDataVersion = '1.0.4.RELEASE'
+    springDataVersion = '1.7.2.RELEASE'
     jacksonVersion = '1.9.12'
     jettyVersion = '7.6.0.v20120127'
+    mongoDriver = '3.0.3'
 }
 
 sourceSets {
@@ -70,10 +72,12 @@ dependencies {
     compile 'com.google.guava:guava:r09'
     compile 'org.apache.commons:commons-lang3:3.0'
     compile 'com.googlecode.lambdaj:lambdaj:2.3.3'
-    
-    compile 'org.mongodb:mongo-java-driver:2.9.1'
-    compile "org.springframework.data:spring-data-mongodb:$springDataVersion"
-    compile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.28'
+
+    compile "org.mongodb:mongo-java-driver:$mongoDriver"
+    compile("org.springframework.data:spring-data-mongodb:$springDataVersion") {
+        exclude group: "org.mongodb", module: "mongo-java-driver"
+    }
+    compile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.50.0'
     
     testCompile 'junit:junit:4.11'
     testCompile 'org.assertj:assertj-core:1.5.0'

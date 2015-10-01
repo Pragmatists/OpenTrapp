@@ -19,8 +19,7 @@ import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={
         MongoContext.class, 
-        MongoLabProfile.class, 
-        MongoDevelopmentProfile.class, 
+        MongoDevelopmentProfile.class,
         MongoDevelopmentDatabase.class
 })
 @ActiveProfiles({"mongo", "mongo-dev"})
