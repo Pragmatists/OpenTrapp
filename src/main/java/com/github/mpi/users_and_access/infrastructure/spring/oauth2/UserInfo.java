@@ -2,10 +2,12 @@ package com.github.mpi.users_and_access.infrastructure.spring.oauth2;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserInfo {
 
     @JsonProperty("id")

@@ -8,3 +8,4 @@ build/
 *.iml
 *.ipr
 .java-version
+out/
