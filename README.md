@@ -24,8 +24,8 @@ Unitll https://github.com/Pragmatists/OpenTrapp/issues/73 is not fixed, use Java
  * ```demo``` - populate database with sample data.
  
 ### Examples:
- * ```gradle jettyRun -Dspring.profiles.active=transients,mock-security,demo```
- * ```gradle jettyRun -Dspring.profiles.active=mongo,mongo-lab,spring-security```
+ * ```gradle jettyRun -Dspring.profiles.active=transients,security,mock-security,demo``` - mock mode
+ * ```gradle jettyRun -Dspring.profiles.active=mongo,mongo-lab,security,spring-security,google-security``` - production mode
  
 ## REST API executable specification:
 [http://pragmatists.github.io/OpenTrapp](http://pragmatists.github.io/OpenTrapp)
