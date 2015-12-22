@@ -12,39 +12,38 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Month implements Period {
+public class Year {
 
-    private static Pattern DATE_FORMAT = Pattern.compile("(\\d{4})/(\\d{2})");
+    private static Pattern YEAR_FORMAT = Pattern.compile("(\\d{4})");
 
     private final String value;
 
-    public static Month of(String month) {
-        validate(month);
+    public static Year of(String year) {
+        validate(year);
 
-        return new Month(month);
+        return new Year(year);
     }
 
-    private static void validate(String month) {
-        Matcher matcher = DATE_FORMAT.matcher(month);
+    private static void validate(String year) {
+        Matcher matcher = YEAR_FORMAT.matcher(year);
 
         if (!matcher.matches()) {
-            throw new IllegalArgumentException(String.format("Invalid month format: %s. Expected format is: yyyy/mm", month));
+            throw new IllegalArgumentException(String.format("Invalid year format: %s. Expected format is: yyyy", year));
         }
 
         int yearValue = Integer.parseInt(matcher.group(1));
-        int monthValue = Integer.parseInt(matcher.group(2));
 
-        if (!DateValidator.isValidMonth(yearValue, monthValue)) {
-            throw new IllegalArgumentException(String.format("Invalid month: %s", month));
+        if (!DateValidator.isValidYear(yearValue)) {
+            throw new IllegalArgumentException(String.format("Invalid year: %s", year));
         }
     }
 
-    private Month(String value) {
+    private Year(String value) {
         this.value = value;
     }
 
     public Day firstDay() {
-        return Day.of(String.format("%s/01", value));
+        return Day.of(String.format("%s/01/01", value));
     }
 
     public Day lastDay() {
@@ -56,7 +55,8 @@ public class Month implements Period {
             Date date = format.parse(firstDay().toString());
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(date);
-            calendar.add(Calendar.MONTH, 1);
+            calendar.add(Calendar.YEAR, 1);
+            calendar.set(Calendar.MONTH, 0);
             calendar.add(Calendar.DAY_OF_MONTH, -1);
 
             return Day.of(format.format(calendar.getTime()));
@@ -79,11 +79,6 @@ public class Month implements Period {
     @Override
     public String toString() {
         return value;
-    }
-
-    @Override
-    public boolean contains(Day day) {
-        return day.in(this);
     }
 
     public static boolean isValid(String date) {

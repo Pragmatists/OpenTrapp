@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
-import com.github.mpi.time_registration.domain.WorkLogUpdateExpression;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository.WorkLogEntryDoesNotExists;
+import com.github.mpi.time_registration.domain.WorkLogQuery;
+import com.github.mpi.time_registration.domain.WorkLogUpdateExpression;
 import com.github.mpi.time_registration.infrastructure.persistence.mongo.UnitOfWork;
 
 @Controller
@@ -46,8 +47,7 @@ public class BulkUpdateEndpoint {
         
         WorkLogUpdateExpression expression = WorkLogUpdateExpression.parse(bulkUpdate.expression);
         
-        for(WorkLogEntry entry: repository.loadAll()){
-            
+        for(WorkLogEntry entry: repository.loadAll().byQuery(new WorkLogQuery(bulkUpdate.query))){
             expression.applyOn(entry);
             rows++;
         }
@@ -63,12 +63,22 @@ public class BulkUpdateEndpoint {
             value    = "/endpoints/v1/work-log/{query:.*}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody AffectedEntriesJson validateQuery(@PathVariable("query") String query){
+
+        int rows = 0;
      
-        if(query.contains("project")){
-            return new AffectedEntriesJson(12);
+        for(WorkLogEntry entry: repository.loadAll().byQuery(new WorkLogQuery(decode(query)))){
+            rows++;
         }
         
-        throw new IllegalArgumentException("Invalid query!");
+        return new AffectedEntriesJson(rows);
+    }
+
+    private String decode(String query) {
+        return query.replaceAll("!project=", "#")
+                .replaceAll("!employee=", "*")
+                .replaceAll("!date=", "@")
+                .replaceAll("\\+", " ")
+                .replaceAll(":", "/");
     }
 
     @RequestMapping(
@@ -124,10 +134,7 @@ public class BulkUpdateEndpoint {
         public ErrorJson(String error) {
             this.error = error;
         }
-        
     }
-
-
 
 }
 

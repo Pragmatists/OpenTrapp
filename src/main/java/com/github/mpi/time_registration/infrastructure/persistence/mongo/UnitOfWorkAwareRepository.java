@@ -1,6 +1,7 @@
 package com.github.mpi.time_registration.infrastructure.persistence.mongo;
 
 import java.util.Iterator;
+import java.util.List;
 
 import com.github.mpi.time_registration.domain.EmployeeID;
 import com.github.mpi.time_registration.domain.ProjectName;
@@ -8,6 +9,8 @@ import com.github.mpi.time_registration.domain.WorkLog;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+import com.github.mpi.time_registration.domain.WorkLogQuery;
+import com.github.mpi.time_registration.domain.time.DateRange;
 import com.github.mpi.time_registration.domain.time.Period;
 
 public class UnitOfWorkAwareRepository implements WorkLogEntryRepository {
@@ -90,13 +93,33 @@ public class UnitOfWorkAwareRepository implements WorkLogEntryRepository {
         }
 
         @Override
+        public WorkLog forProjects(List<ProjectName> projects) {
+            return worklog.forProjects(projects);
+        }
+
+        @Override
         public WorkLog forEmployee(EmployeeID employeeID) {
             return worklog.forEmployee(employeeID);
         }
 
         @Override
+        public WorkLog forEmployees(List<EmployeeID> employees) {
+            return worklog.forEmployees(employees);
+        }
+
+        @Override
         public WorkLog in(Period months) {
             return worklog.in(months);
+        }
+
+        @Override
+        public WorkLog forDateRanges(List<DateRange> dateRanges) {
+            return worklog.forDateRanges(dateRanges);
+        }
+
+        @Override
+        public WorkLog byQuery(WorkLogQuery query) {
+            return query.applyOn(this);
         }
     }
 
