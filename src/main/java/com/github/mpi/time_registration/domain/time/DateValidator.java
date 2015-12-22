@@ -25,4 +25,7 @@ class DateValidator {
         return isValidDay(yearValue, monthValue, 1);
     }
 
+    public static boolean isValidYear(int yearValue) {
+        return isValidMonth(yearValue, 1);
+    }
 }

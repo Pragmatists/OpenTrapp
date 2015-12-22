@@ -1,6 +1,8 @@
 package com.github.mpi.users_and_access.infrastructure.spring;
 
-import java.io.IOException;
+import com.google.common.collect.Sets;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.openid.OpenIDAuthenticationFilter;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
@@ -11,11 +13,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.openid.OpenIDAuthenticationFilter;
-
-import com.google.common.collect.Sets;
+import java.io.IOException;
 
 public class FixedOpenIDProviderFilter implements Filter{
     

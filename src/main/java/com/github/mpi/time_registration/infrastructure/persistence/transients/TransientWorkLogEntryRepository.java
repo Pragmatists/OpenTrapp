@@ -12,6 +12,8 @@ import com.github.mpi.time_registration.domain.WorkLog;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+import com.github.mpi.time_registration.domain.WorkLogQuery;
+import com.github.mpi.time_registration.domain.time.DateRange;
 import com.github.mpi.time_registration.domain.time.Period;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -65,7 +67,13 @@ public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
 
     private final class TransientWorkLog implements WorkLog {
 
+        private Predicate<WorkLogEntry> constraints = alwaysTrue();
+        private Predicate<WorkLogEntry> employeeConstraint = alwaysTrue();
+        private Predicate<WorkLogEntry> projectNameConstraint = alwaysTrue();
+        private Predicate<WorkLogEntry> periodConstraint = alwaysTrue();
+
         private final class ExtractProjectNames implements Function<WorkLogEntry, Iterable<ProjectName>> {
+
             @Override
             public Iterable<ProjectName> apply(WorkLogEntry x) {
                 return x.projectNames();
@@ -73,48 +81,98 @@ public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
         }
 
         private final class ExtractEmployeeID implements Function<WorkLogEntry, EmployeeID> {
+
             @Override
             public EmployeeID apply(WorkLogEntry x) {
                 return x.employee();
             }
         }
 
-        private Predicate<WorkLogEntry> constraints = alwaysTrue();
-
         @Override
         public Iterator<WorkLogEntry> iterator() {
+            addConstraint(employeeConstraint);
+            addConstraint(projectNameConstraint);
+            addConstraint(periodConstraint);
             return Iterators.filter(store.iterator(), constraints);
         }
 
         @Override
         public WorkLog forProject(final ProjectName projectName) {
-            addConstraint(compose(new Predicate<Iterable<ProjectName>>() {
+            projectNameConstraint = compose(new Predicate<Iterable<ProjectName>>() {
                 @Override
                 public boolean apply(Iterable<ProjectName> input) {
                     return Iterables.contains(input, projectName);
                 }
-            }, new ExtractProjectNames()));
+            }, new ExtractProjectNames());
+            return this;
+        }
+
+        @Override
+        public WorkLog forProjects(final List<ProjectName> projects) {
+            projectNameConstraint = compose(new Predicate<Iterable<ProjectName>>() {
+                @Override
+                public boolean apply(Iterable<ProjectName> input) {
+                    for (ProjectName projectName : input) {
+                        if (projects.contains(projectName)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }, new ExtractProjectNames());
             return this;
         }
 
         @Override
         public WorkLog forEmployee(EmployeeID employeeID) {
-            addConstraint(compose(equalTo(employeeID), new ExtractEmployeeID()));
+            employeeConstraint = compose(equalTo(employeeID), new ExtractEmployeeID());
+            return this;
+        }
+
+        @Override
+        public WorkLog forEmployees(final List<EmployeeID> employees) {
+            employeeConstraint = compose(new Predicate<EmployeeID>() {
+                @Override
+                public boolean apply(EmployeeID input) {
+                    return employees.contains(input);
+                }
+            }, new ExtractEmployeeID());
             return this;
         }
 
         @Override
         public WorkLog in(final Period period) {
-            addConstraint(new Predicate<WorkLogEntry>() {
+            periodConstraint = new Predicate<WorkLogEntry>() {
                 @Override
                 public boolean apply(WorkLogEntry entry) {
                     return period.contains(entry.day());
                 }
 
-            });
+            };
             return this;
         }
 
+        @Override
+        public WorkLog forDateRanges(final List<DateRange> dateRanges) {
+            periodConstraint = new Predicate<WorkLogEntry>() {
+                @Override
+                public boolean apply(WorkLogEntry entry) {
+                    for (DateRange dateRange : dateRanges) {
+                        if (dateRange.contains(entry.day())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+            };
+            return this;
+        }
+
+        @Override
+        public WorkLog byQuery(WorkLogQuery query) {
+            return query.applyOn(this);
+        }
 
 
         private void addConstraint(Predicate<WorkLogEntry> constraint) {

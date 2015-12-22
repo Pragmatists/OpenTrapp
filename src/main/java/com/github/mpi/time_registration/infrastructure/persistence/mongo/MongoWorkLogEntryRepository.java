@@ -1,24 +1,25 @@
 package com.github.mpi.time_registration.infrastructure.persistence.mongo;
 
-import static java.util.Arrays.asList;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-
 import com.github.mpi.time_registration.domain.EmployeeID;
 import com.github.mpi.time_registration.domain.ProjectName;
 import com.github.mpi.time_registration.domain.WorkLog;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+import com.github.mpi.time_registration.domain.WorkLogQuery;
+import com.github.mpi.time_registration.domain.time.DateRange;
 import com.github.mpi.time_registration.domain.time.DisjointMonths;
 import com.github.mpi.time_registration.domain.time.Month;
 import com.github.mpi.time_registration.domain.time.Period;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
 
@@ -70,11 +71,11 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
 
     private final class MongoWorkLog implements WorkLog {
 
-        private EmployeeID employeeID;
+        private List<EmployeeID> employeeIDs = new ArrayList<>();
 
-        private ProjectName projectName;
+        private List<ProjectName> projectNames = new ArrayList<>();
 
-        private List<Interval> intervals = new ArrayList<Interval>();
+        private List<DateRange> intervals = new ArrayList<>();
 
         @Override
         public Iterator<WorkLogEntry> iterator() {
@@ -84,11 +85,11 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
         private Query buildQuery() {
 
             Criteria criteria = new Criteria();
-            if (employeeID != null) {
-                criteria.and("employeeID").is(employeeID);
+            if (!employeeIDs.isEmpty()) {
+                criteria.and("employeeID").in(employeeIDs);
             }
-            if (projectName != null) {
-                criteria.and("projectNames").in(asList(projectName));
+            if (!projectNames.isEmpty()) {
+                criteria.and("projectNames").in(projectNames);
             }
             criteria.andOperator(getPeriodCriteria());
 
@@ -100,7 +101,7 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
                 return new Criteria();
             }
             List<Criteria> dateCriteria = new ArrayList<Criteria>();
-            for (Interval interval : intervals) {
+            for (DateRange interval : intervals) {
                 Criteria criteria = Criteria.where("day.date");
                 criteria.gte(interval.start.toString());
                 criteria.lte(interval.end.toString());
@@ -111,21 +112,34 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
 
         @Override
         public WorkLog forProject(ProjectName projectName) {
-            this.projectName = projectName;
+            this.projectNames = newArrayList(projectName);
+            return this;
+        }
+
+        @Override
+        public WorkLog forProjects(List<ProjectName> projects) {
+            this.projectNames = projects;
             return this;
         }
 
         @Override
         public WorkLog forEmployee(EmployeeID employeeID) {
-            this.employeeID = employeeID;
+            this.employeeIDs = newArrayList(employeeID);
             return this;
+        }
+
+        @Override
+        public WorkLog forEmployees(List<EmployeeID> employeeIDs) {
+            this.employeeIDs = employeeIDs;
+            return this;
+
         }
 
         @Override
         public WorkLog in(Period period) {
             if (period instanceof Month) {
                 Month month = (Month) period;
-                intervals.add(new Interval(month.firstDay(), month.lastDay()));
+                intervals.add(new DateRange(month.firstDay(), month.lastDay()));
             } else if (period instanceof DisjointMonths) {
                 DisjointMonths disjointMonths = (DisjointMonths) period;
                 intervals.addAll(getIntervals(disjointMonths));
@@ -134,12 +148,23 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
             }
             return this;
         }
+
+        @Override
+        public WorkLog forDateRanges(List<DateRange> dateRanges) {
+            this.intervals = dateRanges;
+            return this;
+        }
+
+        @Override
+        public WorkLog byQuery(WorkLogQuery query) {
+            return query.applyOn(this);
+        }
     }
 
-    private ArrayList<Interval> getIntervals(DisjointMonths disjointMonths) {
-        ArrayList<Interval> intervals = new ArrayList<Interval>();
+    private ArrayList<DateRange> getIntervals(DisjointMonths disjointMonths) {
+        ArrayList<DateRange> intervals = new ArrayList<>();
         for (Month month : disjointMonths.getMonths()) {
-            intervals.add(new Interval(month.firstDay(), month.lastDay()));
+            intervals.add(new DateRange(month.firstDay(), month.lastDay()));
         }
         return intervals;
     }
