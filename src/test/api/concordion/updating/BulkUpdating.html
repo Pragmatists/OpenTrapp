@@ -1,0 +1,82 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+<body>
+
+    <h1>Bulk Updating</h1>
+
+    <div class="examples">
+        <div class="example">
+
+            <h3>
+                <u>Example 1</u>: Bulk update of Work Log Entris
+            </h3>
+
+            <ul concordion:execute="clear()">
+                <li>Given following entries 
+                    <table concordion:execute="workLogEntry(#id, #workload, #projectNames)">
+                        <thead>
+                            <tr>
+                                <th concordion:set="#id">Id</th>
+                                <th concordion:set="#workload">Workload</th>
+                                <th concordion:set="#projectNames">Project Names</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WL.0004</td>
+                                <td>2h 50m</td>
+                                <td>ProjectManhattan</td>
+                            </tr>
+                            <tr>
+                                <td>WL.0005</td>
+                                <td>1d</td>
+                                <td>ProjectManhattan, In-Progress</td>
+                            </tr>
+                            <tr>
+                                <td>WL.0006</td>
+                                <td>6h 30m</td>
+                                <td>ApolloProject</td>
+                            </tr>
+                        </tbody>
+                    </table>
+				</li>
+                <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/work-log/bulk-update</code></li>
+                <li>And request body contains following data: <pre concordion:execute="body(#TEXT)">{
+    "query": "#ProjectManhattan",
+    "expression": "+#Completed -#In-Progress"    
+}
+</pre>
+                </li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
+                <li>And following work log entries should exist:
+                    <table concordion:verifyRows="#entry : allWorkLogEntries()">
+                        <thead>
+                            <tr>
+                                <th concordion:assertEquals="#entry.id">Id</th>
+                                <th concordion:assertEquals="#entry.workload">Workload</th>
+                                <th concordion:assertEquals="#entry.projectNames">Project Names</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WL.0004</td>
+                                <td>2h 50m</td>
+                                <td>Completed, ProjectManhattan</td>
+                            </tr>
+                            <tr>
+                                <td>WL.0005</td>
+                                <td>1d</td>
+                                <td>Completed, ProjectManhattan</td>
+                            </tr>
+                            <tr>
+                                <td>WL.0006</td>
+                                <td>6h 30m</td>
+                                <td>ApolloProject</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </div>
+	</div>
+</body>
+</html>

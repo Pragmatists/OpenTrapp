@@ -2,6 +2,8 @@ package com.github.mpi.time_registration.domain;
 
 import static java.util.Arrays.*;
 
+import java.util.Collection;
+
 import com.github.mpi.time_registration.domain.time.Day;
 
 import ch.lambdaj.Lambda;
@@ -23,11 +25,11 @@ public class WorkLogEntryFactory {
 
     }
 
-    public WorkLogEntry newEntry(String workload, Iterable<String> projectNames, String day) {
+    public WorkLogEntry newEntry(String workload, Collection<String> projectNames, String day) {
         return new WorkLogEntry(sequence.nextID(), Workload.of(workload), convert(projectNames), employeeContext.employeeID(), Day.of(day));
     }
 
-    private Iterable<ProjectName> convert(Iterable<String> projectNames) {
+    private Collection<ProjectName> convert(Collection<String> projectNames) {
         return Lambda.convert(projectNames, new Converter<String, ProjectName>() {
             @Override
             public ProjectName convert(String name) {

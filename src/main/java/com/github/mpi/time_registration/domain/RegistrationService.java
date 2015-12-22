@@ -1,5 +1,7 @@
 package com.github.mpi.time_registration.domain;
 
+import java.util.Collection;
+
 public class RegistrationService {
 
     private final WorkLogEntryFactory factory;
@@ -10,7 +12,7 @@ public class RegistrationService {
         this.repository = repository;
     }
 
-    public void submit(String workload, Iterable<String> projectNames, String day) {
+    public void submit(String workload, Collection<String> projectNames, String day) {
         WorkLogEntry newEntry = factory.newEntry(workload, projectNames, day);
         repository.store(newEntry);
     }

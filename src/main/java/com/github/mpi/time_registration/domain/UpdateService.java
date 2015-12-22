@@ -1,5 +1,7 @@
 package com.github.mpi.time_registration.domain;
 
+import java.util.Collection;
+
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 
 public class UpdateService {
@@ -10,7 +12,7 @@ public class UpdateService {
         this.repository = repository;
     }
 
-    public void updateWorkLogEntry(EntryID entryID, Workload workload, Iterable<ProjectName> projectNames) {
+    public void updateWorkLogEntry(EntryID entryID, Workload workload, Collection<ProjectName> projectNames) {
         
         WorkLogEntry entry = repository.load(entryID);
         

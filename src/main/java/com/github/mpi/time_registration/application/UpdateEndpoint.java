@@ -5,6 +5,8 @@ import static javax.servlet.http.HttpServletResponse.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
@@ -51,7 +53,7 @@ public class UpdateEndpoint {
     public @ResponseBody String updateEntry(HttpServletResponse response, @PathVariable String id, @RequestBody Form form){
 
         Workload workload = form.workload == null ? null : Workload.of(form.workload);
-        Iterable<ProjectName> projectNames = form.projectNames == null ? null : convert(form.projectNames,
+        Collection<ProjectName> projectNames = form.projectNames == null ? null : convert(form.projectNames,
                 new Converter<String, ProjectName>() {
                     @Override
                     public ProjectName convert(String name) {

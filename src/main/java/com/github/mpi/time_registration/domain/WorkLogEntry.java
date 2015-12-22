@@ -1,6 +1,9 @@
 package com.github.mpi.time_registration.domain;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.github.mpi.time_registration.domain.time.Day;
 
@@ -11,15 +14,15 @@ public class WorkLogEntry {
     private final Day day;
     
     private Workload workload;
-    private Iterable<ProjectName> projectNames;
+    private Set<ProjectName> projectNames;
     
     @SuppressWarnings("unused") // convinient for external systems 
     private Date createdAt = new Date();
 
-    public WorkLogEntry(EntryID id, Workload workload, Iterable<ProjectName> projectNames, EmployeeID employeeID, Day day) {
+    public WorkLogEntry(EntryID id, Workload workload, Collection<ProjectName> projectNames, EmployeeID employeeID, Day day) {
         this.id = id;
         this.workload = workload;
-        this.projectNames = projectNames;
+        this.projectNames = new HashSet<>(projectNames);
         this.employeeID = employeeID;
         this.day = day;
     }
@@ -48,10 +51,18 @@ public class WorkLogEntry {
         this.workload = newWorkload;
     }
 
-    public void changeProjectsTo(Iterable<ProjectName> newProjects) {
-        this.projectNames = newProjects;
+    public void changeProjectsTo(Collection<ProjectName> newProjects) {
+        this.projectNames = new HashSet<>(newProjects);
+    }
+    
+    public void addProject(ProjectName projectName) {
+        this.projectNames.add(projectName);
     }
 
+    public void removeProject(ProjectName projectName) {
+        this.projectNames.remove(projectName);
+    }
+    
     @Override
     public boolean equals(Object x) {
 
