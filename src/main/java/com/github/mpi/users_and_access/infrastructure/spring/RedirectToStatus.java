@@ -39,9 +39,9 @@ public class RedirectToStatus implements AuthenticationSuccessHandler, Authentic
         if(System.getenv("REDIRECT_AFTER_LOGIN_URL") != null){
             return System.getenv("REDIRECT_AFTER_LOGIN_URL");
         }
-        if(request.getParameter("redirect_to") != null){
-            return request.getParameter("redirect_to");
-        }
+//        if(request.getParameter("redirect_to") != null){
+//            return request.getParameter("redirect_to");
+//        }
         
         return "/endpoints/v1/authentication/status/";
     }
