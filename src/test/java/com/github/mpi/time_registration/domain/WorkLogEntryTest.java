@@ -3,6 +3,9 @@ package com.github.mpi.time_registration.domain;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.junit.Test;
 
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
@@ -14,7 +17,7 @@ public class WorkLogEntryTest {
     public void shouldUpdateWorkload() throws Exception {
 
         // given:
-        WorkLogEntry entry = new WorkLogEntry(null, Workload.of("10h"), null, null, null);
+        WorkLogEntry entry = anEntryWith(Workload.of("10h"));
         
         // when:
         entry.updateWorkload(Workload.of("12h"));
@@ -22,18 +25,19 @@ public class WorkLogEntryTest {
         // then:
         assertThat(entry.workload()).isEqualTo(Workload.of("12h"));
     }
-   
+
     @Test
     public void shouldChangeProject() throws Exception {
         
         // given:
-        WorkLogEntry entry = new WorkLogEntry(null, null, asList(new ProjectName("OldProject")), null, null);
+        WorkLogEntry entry = anEntryWith(new ProjectName("OldProject"));
         
         // when:
         entry.changeProjectsTo(asList(new ProjectName("NewProject")));
         
         // then:
-        assertThat(entry.projectNames()).isEqualTo(asList(new ProjectName("NewProject")));
+        assertThat(entry.projectNames())
+            .containsExactly(new ProjectName("NewProject"));
     }
     
     @Test
@@ -107,6 +111,14 @@ public class WorkLogEntryTest {
     
     // --
     
+    private WorkLogEntry anEntryWith(Workload workload) {
+        return new WorkLogEntry(new EntryID("WL.0001"), workload, Collections.<ProjectName>emptySet(), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+    }
+
+    private WorkLogEntry anEntryWith(ProjectName project) {
+        return new WorkLogEntry(new EntryID("WL.0001"), Workload.of("1h"), Arrays.asList(project), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
+    }
+       
     private ProjectName project(String name) {
         return new ProjectName(name);
     }

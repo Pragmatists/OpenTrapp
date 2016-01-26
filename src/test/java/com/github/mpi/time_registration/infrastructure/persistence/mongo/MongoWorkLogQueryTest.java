@@ -29,7 +29,7 @@ public class MongoWorkLogQueryTest extends WorkLogQueryContractTest {
     
     @Before
     public void setUp() {
-        repository = new MongoWorkLogEntryRepository(mongo);
+        repository = new MongoWorkLogEntryRepository(mongo);        
         mongo.dropCollection(WorkLogEntry.class);
     }
 }

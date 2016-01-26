@@ -50,7 +50,8 @@ public class UpdateServiceTest {
         service.updateWorkLogEntry(new EntryID("entry-id"), null, asList(new ProjectName("NewProject")));
         
         // then:
-        assertThat(entry.projectNames()).isEqualTo(asList(new ProjectName("NewProject")));
+        assertThat(entry.projectNames())
+            .containsExactly(new ProjectName("NewProject"));
         assertThat(entry.workload()).isNotNull();
     }
     
@@ -65,7 +66,8 @@ public class UpdateServiceTest {
         
         // then:
         assertThat(entry.workload()).isEqualTo(Workload.of("8h"));
-        assertThat(entry.projectNames()).isEqualTo(asList(new ProjectName("NewProject")));
+        assertThat(entry.projectNames())
+            .containsExactly(new ProjectName("NewProject"));
     }
     
     // --

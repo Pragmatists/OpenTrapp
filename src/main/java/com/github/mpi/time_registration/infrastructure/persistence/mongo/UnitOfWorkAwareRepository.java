@@ -89,37 +89,37 @@ public class UnitOfWorkAwareRepository implements WorkLogEntryRepository {
 
         @Override
         public WorkLog forProject(ProjectName projectName) {
-            return worklog.forProject(projectName);
+            return new UnitOfWorkWorkLog(worklog.forProject(projectName));
         }
 
         @Override
         public WorkLog forProjects(List<ProjectName> projects) {
-            return worklog.forProjects(projects);
+            return new UnitOfWorkWorkLog(worklog.forProjects(projects));
         }
 
         @Override
         public WorkLog forEmployee(EmployeeID employeeID) {
-            return worklog.forEmployee(employeeID);
+            return new UnitOfWorkWorkLog(worklog.forEmployee(employeeID));
         }
 
         @Override
         public WorkLog forEmployees(List<EmployeeID> employees) {
-            return worklog.forEmployees(employees);
+            return new UnitOfWorkWorkLog(worklog.forEmployees(employees));
         }
 
         @Override
         public WorkLog in(Period months) {
-            return worklog.in(months);
+            return new UnitOfWorkWorkLog(worklog.in(months));
         }
 
         @Override
         public WorkLog forDateRanges(List<DateRange> dateRanges) {
-            return worklog.forDateRanges(dateRanges);
+            return new UnitOfWorkWorkLog(worklog.forDateRanges(dateRanges));
         }
 
         @Override
         public WorkLog byQuery(WorkLogQuery query) {
-            return query.applyOn(this);
+            return new UnitOfWorkWorkLog(query.applyOn(worklog));
         }
     }
 
