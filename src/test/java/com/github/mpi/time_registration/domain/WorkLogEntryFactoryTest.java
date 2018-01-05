@@ -1,17 +1,16 @@
 package com.github.mpi.time_registration.domain;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
+import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.time.Day;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.time.Day;
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WorkLogEntryFactoryTest {
@@ -36,7 +35,7 @@ public class WorkLogEntryFactoryTest {
         WorkLogEntry workLogEntry = factory.newEntry("2h 13m", "ProjectManhattan");
         
         // then:
-        assertThat(workLogEntry.projectNames()).isEqualTo(asList(new ProjectName("ProjectManhattan")));
+        assertThat(workLogEntry.projectNames()).containsExactly(new ProjectName("ProjectManhattan"));
         assertThat(workLogEntry.workload()).isEqualTo(Workload.of("2h 13m"));
     }
 
