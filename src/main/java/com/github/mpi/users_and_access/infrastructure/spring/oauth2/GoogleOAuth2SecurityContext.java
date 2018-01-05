@@ -12,10 +12,14 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 
 import javax.servlet.Filter;
@@ -23,8 +27,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
+@EnableWebSecurity
 @Profile("google-security")
-public class GoogleOAuth2SecurityContext {
+public class GoogleOAuth2SecurityContext extends WebSecurityConfigurerAdapter {
     Logger log = LoggerFactory.getLogger(GoogleOAuth2SecurityContext.class);
 
     private final String LOGIN_URL = "/endpoints/v1/authentication/login";
@@ -32,9 +37,9 @@ public class GoogleOAuth2SecurityContext {
     @Autowired
     private Filter springSecurityFilterChain;
 
-    public GoogleOAuth2SecurityContext() {
+    @Autowired
+    private MobileAuthenticationManager mobileAuthenticationManager;
 
-    }
 
     @Bean(name="securityFilterChain")
     public Filter securityFilterChain(){
@@ -46,7 +51,7 @@ public class GoogleOAuth2SecurityContext {
         return new LoginUrlAuthenticationEntryPoint(LOGIN_URL);
     }
 
-    private AuthenticationManager authenticationManager(){
+    protected AuthenticationManager authenticationManager(){
         PreAuthenticatedAuthenticationProvider basicProvider = new PreAuthenticatedAuthenticationProvider();
         basicProvider.setPreAuthenticatedUserDetailsService(detailsService());
         List<AuthenticationProvider> singleProvider = Arrays.<AuthenticationProvider>asList(basicProvider);
@@ -78,6 +83,24 @@ public class GoogleOAuth2SecurityContext {
         MobileFilter mobileFilter = new MobileFilter(mobileAuthenticationManager);
         mobileFilter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/endpoints/v1/authentication/mobile-success"));
         return mobileFilter;
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .addFilterBefore(mobileFilter(mobileAuthenticationManager), AbstractPreAuthenticatedProcessingFilter.class)
+                .addFilterAfter(oAuth2ClientContextFilter(), AbstractPreAuthenticatedProcessingFilter.class)
+                .addFilterAfter(openIdConnectAuthenticationFilter(), OAuth2ClientContextFilter.class)
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
+                .and()
+                .logout()
+                .logoutSuccessHandler(new RedirectToStatus())
+                .logoutUrl("/endpoints/v1/authentication/logout")
+                .and()
+                .authorizeRequests()
+                .antMatchers("/endpoints/v1/authentication/**").permitAll()
+                .antMatchers("/**").authenticated();
     }
 
 }
