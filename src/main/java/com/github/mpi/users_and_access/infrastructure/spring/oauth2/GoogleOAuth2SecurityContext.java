@@ -76,8 +76,7 @@ public class GoogleOAuth2SecurityContext {
     @Bean(name = "mobileFilter")
     public MobileFilter mobileFilter() {
         MobileFilter mobileFilter = new MobileFilter(new MobileAuthenticationManager());
-        mobileFilter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/endpoints/v1/authentication/status"
-        ));
+        mobileFilter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/endpoints/v1/authentication/mobile-success"));
         return mobileFilter;
     }
 
