@@ -1,10 +1,7 @@
 package com.github.mpi.users_and_access.application;
 
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.github.mpi.users_and_access.domain.SecurityContext;
+import com.github.mpi.users_and_access.domain.User;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.github.mpi.users_and_access.domain.SecurityContext;
-import com.github.mpi.users_and_access.domain.User;
+import javax.servlet.http.HttpServletRequest;
+
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 public class AuthenticationEndpoint {

@@ -18,7 +18,7 @@ allprojects {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.9'
+    gradleVersion = '2.13'
 }
 
 repositories { 
@@ -85,7 +85,8 @@ dependencies {
         exclude group: "org.mongodb", module: "mongo-java-driver"
     }
     compile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.50.0'
-    
+    compile 'com.google.api-client:google-api-client:1.23.0'
+
     testCompile 'junit:junit:4.11'
     testCompile 'org.assertj:assertj-core:1.5.0'
     testCompile 'org.mockito:mockito-all:1.9.5'

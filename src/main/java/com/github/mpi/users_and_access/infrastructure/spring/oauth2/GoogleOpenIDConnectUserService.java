@@ -1,11 +1,6 @@
 package com.github.mpi.users_and_access.infrastructure.spring.oauth2;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
-
+import com.github.mpi.users_and_access.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
@@ -14,7 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.openid.OpenIDAttribute;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
-import com.github.mpi.users_and_access.domain.User;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class GoogleOpenIDConnectUserService implements AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
 
