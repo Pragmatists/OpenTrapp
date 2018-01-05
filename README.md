@@ -9,7 +9,7 @@ Open Time Registration Application
 ```
   gradle clean test
 ```
-Unitll https://github.com/Pragmatists/OpenTrapp/issues/73 is not fixed, use Java 7 for building project.
+Until https://github.com/Pragmatists/OpenTrapp/issues/73 is not fixed, use Java 7 for building project.
 ## Starting server:
 ```
   gradle jettyRun -Dspring.profiles.active={profilesToActivate}
@@ -25,7 +25,7 @@ Unitll https://github.com/Pragmatists/OpenTrapp/issues/73 is not fixed, use Java
  
 ### Examples:
  * ```gradle jettyRun -Dspring.profiles.active=transients,security,mock-security,demo``` - mock mode
- * ```gradle jettyRun -Dspring.profiles.active=mongo,mongo-lab,security,spring-security,google-security``` - production mode
+ * ```gradle jettyRun -Dspring.profiles.active=mongo,mongo-lab,google-security``` - production mode (verify at Procfile)
  
 ## REST API executable specification:
 [http://pragmatists.github.io/OpenTrapp](http://pragmatists.github.io/OpenTrapp)
