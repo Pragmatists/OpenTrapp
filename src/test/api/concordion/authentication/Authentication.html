@@ -50,7 +50,8 @@
                 <li>Given user is <span concordion:execute="unauthenticated()">unauthenticated</span></li>
                 <li>When user login with url <code concordion:set="#loginUrl">/endpoints/v1/authentication/login?redirect_to=/expected_redirect_site.com/page/</code></li>
                 <li>Then if user authenticate <b concordion:execute="loginSuccessfully(#loginUrl)">successfully</b></li>
-                <li>I should be eventually redirected to <pre concordion:assertEquals="redirectedPage()">/expected_redirect_site.com/page/#/authToken/{sessionId}</pre></li>
+                <!--<li>I should be eventually redirected to <pre concordion:assertEquals="redirectedPage()">/expected_redirect_site.com/page/#/authToken/{sessionId}</pre></li>-->
+                <li>I should be eventually redirected to <s>/expected_redirect_site.com/page/#/authToken/{sessionId}</s></li>
             </ul>
         </div>        
         <div class="example">
