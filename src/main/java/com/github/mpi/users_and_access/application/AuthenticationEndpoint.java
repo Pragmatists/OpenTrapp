@@ -39,7 +39,8 @@ public class AuthenticationEndpoint {
     }
     
     private String host(){
-        
+        System.out.println("X-Forwarded-Proto = " + request.getHeader("X-Forwarded-Proto"));
+        System.out.println("all headers = " + request.getHeaderNames());
         String fullPath = request.getRequestURL().toString();
         return fullPath.replace(request.getRequestURI(), "");
     }
