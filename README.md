@@ -29,3 +29,9 @@ Until https://github.com/Pragmatists/OpenTrapp/issues/73 is not fixed, use Java 
  
 ## REST API executable specification:
 [http://pragmatists.github.io/OpenTrapp](http://pragmatists.github.io/OpenTrapp)
+
+##Deployment on production
+
+Automatic deploys from `master` are enabled  
+
+Every push to master will deploy a new version of this app. Be sure that master branch is in deployable state and any tests have passed before you push.
