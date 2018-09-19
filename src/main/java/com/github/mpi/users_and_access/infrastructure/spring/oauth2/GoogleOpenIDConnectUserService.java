@@ -39,11 +39,7 @@ public class GoogleOpenIDConnectUserService implements AuthenticationUserDetails
             throw new UsernameNotFoundException(email);
         }
 
-        return new OpenIDUserAdapter(userNameFrom(email), fullNameFrom(userInfo));
-    }
-
-    private String fullNameFrom(UserInfo userInfo) {
-        return String.format(userInfo.getName());
+        return new OpenIDUserAdapter(userNameFrom(email), userNameFrom(email));
     }
 
     private String userNameFrom(String email) {
