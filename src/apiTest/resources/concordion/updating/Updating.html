@@ -1,0 +1,130 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+<body>
+
+    <h1>Updating</h1>
+
+    <div class="examples">
+        <div class="example">
+
+            <h3  concordion:execute="clear()">
+                <u>Example 1</u>: Partial update of existing Work Log Entry (update workload)
+            </h3>
+
+            <ul>
+                <li>Given entry with 
+                id <b concordion:set="#id">WL.0005</b>,
+                workload <b concordion:set="#workload">1h 30m</b> and
+                project <b concordion:set="#project">OldProject</b>
+                already <span concordion:execute="workLogEntry(#id, #workload, #project)">exists</span></li>
+                <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.0005</code>
+                <li>And request body contains following data: <pre concordion:execute="body(#TEXT)">{
+    "workload": "2h 50m"
+}
+</pre>
+                </li>
+                </li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200</b></li>
+                <li>And following work log entries should exist:
+                    <table concordion:verifyRows="#entry : allWorkLogEntries()">
+                        <thead>
+                            <tr>
+                                <th concordion:assertEquals="#entry.id">Id</th>
+                                <th concordion:assertEquals="#entry.workload">Workload</th>
+                                <th concordion:assertEquals="#entry.projectNames">Project Names</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WL.0005</td>
+                                <td>2h 50m</td>
+                                <td>OldProject</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </div>
+        <div class="example">
+
+            <h3 concordion:execute="clear()">
+                <u>Example 2</u>: Partial update of existing Work Log Entry (change project)
+            </h3>
+            <ul>
+                <li>Given entry with 
+                id <b concordion:set="#id">WL.0006</b>, 
+                workload <b concordion:set="#workload">1h 30m</b> and 
+                project <b concordion:set="#project">OldProject</b>
+                already <span concordion:execute="workLogEntry(#id, #workload, #project)">exists</span></li>
+                <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.0006</code>
+                <li>And request body contains following data: <pre concordion:execute="body(#TEXT)">{
+    "projectNames": ["NewProject"]
+}
+</pre>
+                </li>
+                </li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200</b></li>
+                <li>And following work log entries should exist:
+                    <table concordion:verifyRows="#entry : allWorkLogEntries()">
+                        <thead>
+                            <tr>
+                                <th concordion:assertEquals="#entry.id">Id</th>
+                                <th concordion:assertEquals="#entry.workload">Workload</th>
+                                <th concordion:assertEquals="#entry.projectNames">Project Names</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WL.0006</td>
+                                <td>1h 30m</td>
+                                <td>NewProject</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </div>
+        <div class="example">
+            <h3>
+                <u  concordion:execute="clear()">Example 3</u>: Deleting Work Log Entry
+            </h3>
+            <ul>
+                <li><span concordion:execute="workLogEntry(#id)">Given entry with id <b concordion:set="#id">WL.0006</b> already exists</span></li>
+                <li>When <b concordion:set="#method">DELETE</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.0006</code></li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 204</b></li>
+                <li>And there should be no more <span concordion:assertFalse="entryExists(#id)"><b concordion:set="#id">WL.0006</b></span> work log entry.</li>
+            </ul>
+        </div>
+        <div class="example">
+            <h3 concordion:execute="clear()">
+                <u>Example 4</u>: Include location of updated resource in response headers
+            </h3>
+            
+            <ul>
+                <li>When <span concordion:execute="successfulRequest()">request</span> is handled <b concordion:assertTrue="isSuccessful()">succesfully</b></li>
+                <li>Then response body should contain following <b concordion:set="#header">Location</b> header: 
+                    <pre concordion:assertEquals="headerContent(#header)">Location: /endpoints/v1/work-log/entries/WL.0001</pre>
+                </li>
+            </ul>
+        </div>
+        <div class="example">
+
+            <h3 concordion:execute="clear()">
+                <u>Example 4</u>: Trying to update not existing Work Log Entry
+            </h3>
+
+            <ul>
+                <li>Given there are no entries</li>
+                <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.0404</code>
+                <li>And request body contains following data: <pre concordion:execute="body(#TEXT)">{
+    "projectNames": ["SomeProject"]
+}
+</pre>
+                </li>
+                </li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 404</b></li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>

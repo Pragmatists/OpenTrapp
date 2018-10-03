@@ -1,154 +1,80 @@
-buildscript{
+buildscript {
+    ext {
+        springBootVersion = '2.0.4.RELEASE'
+    }
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.ajoberstar:gradle-git:1.1.0'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
-apply plugin: 'war'
-apply plugin: 'jetty'
-apply plugin: 'org.ajoberstar.github-pages'
 apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
-allprojects {
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
-}
+group = 'com.pragmatists'
+version = '1.0.0-SNAPSHOT'
+sourceCompatibility = 1.8
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.9'
-}
-
-repositories { 
-
+repositories {
     mavenCentral()
 }
-
-ext {
-    springVersion = '4.0.9.RELEASE'
-    springSecurityVersion = '3.2.6.RELEASE'
-    springDataVersion = '1.7.2.RELEASE'
-    jacksonVersion = '1.9.12'
-    jettyVersion = '7.6.0.v20120127'
-    mongoDriver = '3.0.3'
-}
-
 sourceSets {
 
-    api {
-        java {
-            srcDir file('src/test/api')
-            compileClasspath += main.output
-            runtimeClasspath += main.output
-        }
+    apiTest {
 
-        test.resources.srcDirs 'src/test/api'
-        
-        compileClasspath = compileClasspath + files(test.output.classesDir)
-        runtimeClasspath = output + compileClasspath
+            compileClasspath += main.output
+            runtimeClasspath += main .output
     }
 }
 
 configurations {
-    runtimeOnly
-    apiCompile.extendsFrom testCompile
-    apiRuntime.extendsFrom testRuntime
+    apiTestCompile.extendsFrom testCompile
+    apiTestRuntime.extendsFrom testRuntime
 }
 
 dependencies {
-    
-    compile 'javax.servlet:servlet-api:2.5'
-    
-    ['context', 'webmvc', 'orm', 'test'].each { module ->
-        compile "org.springframework:spring-$module:$springVersion"
-    }
-    ['core', 'web', 'config', 'openid'].each { module ->
-        compile ("org.springframework.security:spring-security-$module:$springSecurityVersion")
-    }
+    testCompile sourceSets.main.output
+    apiTestCompile sourceSets.main.output
 
-    compile ("org.springframework.security.oauth:spring-security-oauth2:2.0.7.RELEASE")
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-jetty')
+    compile 'com.google.guava:guava:26.0-jre'
+    testCompile('org.junit:junit:4.12')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
+    testCompile('org.springframework.security:spring-security-test')
+    testCompile('org.concordion:concordion:2.2.0')
+    testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
 
-    compile ("org.springframework:spring-context:$springVersion"){
-        exclude group: 'commons-logging', module: 'commons-logging'
-    }
-
-    compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.0.5'
-    compile 'com.google.guava:guava:r09'
-    compile 'org.apache.commons:commons-lang3:3.0'
-    compile 'com.googlecode.lambdaj:lambdaj:2.3.3'
-
-    compile "org.mongodb:mongo-java-driver:$mongoDriver"
-    compile("org.springframework.data:spring-data-mongodb:$springDataVersion") {
-        exclude group: "org.mongodb", module: "mongo-java-driver"
-    }
-    compile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.50.0'
-    
-    testCompile 'junit:junit:4.11'
-    testCompile 'org.assertj:assertj-core:1.5.0'
-    testCompile 'org.mockito:mockito-all:1.9.5'
-    testCompile 'com.googlecode.catch-exception:catch-exception:1.2.0'
-    testCompile 'org.concordion:concordion:1.4.4'
-    testCompile 'com.jayway.restassured:rest-assured:2.0.1'
-    
-    testCompile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
-    testCompile "org.eclipse.jetty:jetty-webapp:$jettyVersion"
-    runtimeOnly "org.mortbay.jetty:jetty-runner:$jettyVersion"
-    
-    compile (
-        [group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.6.2'],
-        [group: 'ch.qos.logback', name: 'logback-core', version: '1.0.0'],
-        [group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.0']
-        )
 }
 
-jettyRun.contextPath = ''
-
-
-task apiTest(type:Test) {
-    
-    ignoreFailures = true
-    systemProperty 'concordion.output.dir', "$buildDir/reports/api-specification"
-    description = "Run acceptance tests against REST API"
-    testClassesDir = project.sourceSets.api.output.classesDir
-    classpath = project.sourceSets.api.runtimeClasspath + files("$rootDir/src/test/api")
-    exclude '**/*Fixture.class'
-}
-
-task stage(dependsOn: ['clean', 'war', 'copyJettyRunner'])
-
-task copyJettyRunner << {
-    copy {
-      from configurations.runtimeOnly.copy().setTransitive(false)
-      into "$buildDir/libs"
-      rename { name ->
-        def artifacts = configurations.runtimeOnly.resolvedConfiguration.resolvedArtifacts
-        def artifact = artifacts.find { it.file.name == name }
-        "${artifact.name}.${artifact.extension}"
-      }
-    }
-  }
-
-test.dependsOn apiTest
 test {
     scanForTestClasses = true
     exclude '**/*Setup'
 }
 
-githubPages {
-    pages {
-        from 'build/reports/api-specification'
-    }
+
+task apiTest(type: Test) {
+
+    group 'API End-to-End tests'
+    description = "Run End-to-End against REST API"
+
+    systemProperty 'concordion.output.dir', "$buildDir/reports/api"
+    testClassesDir = sourceSets.apiTest.output.classesDir
+    classpath = sourceSets.apiTest.runtimeClasspath
+    reports.html.destination = file("$reports.html.destination/api")
+    reports.junitXml.destination = file("$reports.junitXml.destination/api")
+
+    ignoreFailures = false
+    exclude '**/*Fixture.class'
 }
 
-task useMpi << {
-    githubPages.repoUri = 'git@github.com:mpi/OpenTrApp.git'
-}
-
-task useProd << {
-    githubPages.repoUri = 'git@github.com:Pragmatists/OpenTrapp.git'
-}
-
-task publishConcordion(dependsOn: [apiTest, publishGhPages]) {}
+check.dependsOn apiTest

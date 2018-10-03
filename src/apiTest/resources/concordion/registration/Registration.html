@@ -1,0 +1,155 @@
+<html
+        xmlns:concordion="http://www.concordion.org/2007/concordion">
+
+<body>
+
+    <h1>Registration</h1>
+
+    <div class="examples">
+
+        <div>
+            <h3>
+                Background:
+            </h3>
+            <ul>
+                <li>Given user <b>Homer</b> already exists</li>
+            </ul>
+        </div>
+
+        <div class="example">
+
+            <h3  concordion:execute="clear()">
+                <u>Example 1</u>: Response status of a successful request
+            </h3>
+
+            <ul>
+                <li>When a valid <b concordion:set="#method">POST</b> request is sent to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code>
+                </li>
+                <li>
+<pre class="hide" concordion:execute="body(#TEXT)">{
+    "workload": "1h 30m",
+    "projectNames": ["ApiDesign"],
+    "day": "2014/01/01"
+}</pre>
+                </li>
+                <li>
+                    Then the <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to
+                    <b concordion:assertEquals="status()">HTTP/1.1 201</b>
+                </li>
+            </ul>
+        </div>
+
+        <div class="example">
+
+            <h3 concordion:execute="clear()">
+                <u>Example 2</u>: Creating a new Work Log Entry
+            </h3>
+
+            <ul>
+                <li>When a <b concordion:set="#method">POST</b> request is sent to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code>
+                </li>
+                <li>And the request body contains following data:
+<pre concordion:execute="body(#TEXT)">{
+    "workload": "1h 30m",
+    "projectNames": ["ApiDesign", "Implementation"],
+    "day": "2014/01/01"
+}
+</pre>
+                </li>
+                <li concordion:execute="request(#method, #endpoint)">Then a following work log entry should be saved:
+                    <table concordion:verifyRows="#entry : allWorkLogEntries()">
+                        <thead>
+                            <tr>
+                                <th concordion:assertEquals="#entry.project">Projects</th>
+                                <th concordion:assertEquals="#entry.workload">Workload</th>
+                                <th concordion:assertEquals="#entry.employee">Employee</th>
+                                <th concordion:assertEquals="#entry.day">Day</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ApiDesign,Implementation</td>
+                                <td>1h 30m</td>
+                                <td>Homer</td>
+                                <td>2014/01/01</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        </div>
+
+        <div class="example" concordion:execute="clear()">
+
+            <h3>
+                <u>Example 3</u>: Invalid Work Log Expression
+            </h3>
+
+            <ul>
+                <li>When a <b concordion:set="#method">POST</b> request is sent to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code>
+                </li>
+                <li>And request body contains following data:
+<pre concordion:execute="body(#TEXT)">{
+    "workload": "1h 30m"
+}
+</pre>
+                </li>
+                <li>
+                    Then the <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to
+                    <b concordion:assertEquals="status()">HTTP/1.1 400</b>
+                </li>
+            </ul>
+        </div>
+<!-- 
+
+    Spring MVC firsts examines RequestMethod and then ContentType, so error message is different than expected.
+
+        <div class="example">
+
+            <h3>
+                <u>Example 5</u>: Invalid Content Type
+            </h3>
+
+            <ul concordion:execute="clear()">
+                <li>When <b concordion:set="#method">POST</b> request is sent to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
+                <li>And content type is set to <b concordion:execute="contentType(#TEXT)">text/html</b>
+                </li>
+                <li>And request body contains following data:
+<pre concordion:execute="body(#TEXT)">{
+    "workload": "1h 30m",
+    "projectName": "ApiDesign",
+    "day": "2014/01/01"
+}
+</pre>
+                </li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 405 Request method 'POST' not supported</b></li>
+            </ul>
+        </div>
+ -->        
+<!-- 
+
+    This is cancelled for now.
+
+        <div class="example">
+
+            <h3>
+                <u>Example 6</u>: Missing Employee
+            </h3>
+
+            <ul concordion:execute="clear()">
+                <li>When <b concordion:set="#method">POST</b> request is sent to: <code concordion:set="#endpoint">/endpoints/v1/employee/Unknown/work-log/entries</code></li>
+                <li>And request body contains following data:
+<pre concordion:execute="body(#TEXT)">{
+    "workload": "1h 30m",
+    "projectName": "ApiDesign",
+    "day": "2014/01/01"
+}
+</pre>
+                </li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 404 Not Found</b></li>
+            </ul>
+        </div>
+ -->
+    </div>
+</body>
+</html>

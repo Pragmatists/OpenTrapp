@@ -1,0 +1,367 @@
+<html
+        xmlns:concordion="http://www.concordion.org/2007/concordion"
+>
+<body>
+
+<h1>Reporting</h1>
+
+<div class="examples">
+<div class="example">
+
+    <h3 concordion:execute="clear()">
+        <u>Example 1</u>: Listing all entries for given Project
+    </h3>
+
+    <ul>
+        <li>Given there are following entries
+            <table concordion:execute="workLogEntry(#id, #workload, #projectName, #employee, #day)">
+                <thead>
+                <tr>
+                    <th concordion:set="#id">Id</th>
+                    <th concordion:set="#workload">Workload</th>
+                    <th concordion:set="#projectName">Project Name</th>
+                    <th concordion:set="#employee">Employee</th>
+                    <th concordion:set="#day">Day</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>WL.0001</td>
+                    <td>1h</td>
+                    <td>TheProject</td>
+                    <td>John</td>
+                    <td>2014/02/01</td>
+                </tr>
+                <tr>
+                    <td>WL.0002</td>
+                    <td>2h</td>
+                    <td>OtherProject</td>
+                    <td>John</td>
+                    <td>2014/02/14</td>
+                </tr>
+                <tr>
+                    <td>WL.0003</td>
+                    <td>3h</td>
+                    <td>TheProject</td>
+                    <td>Jane</td>
+                    <td>2014/02/24</td>
+                </tr>
+                <tr>
+                    <td>WL.0004</td>
+                    <td>4h</td>
+                    <td>YetAnotherProject</td>
+                    <td>Jane</td>
+                    <td>2014/03/01</td>
+                </tr>
+                </tbody>
+            </table>
+        </li>
+        <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/projects/TheProject/work-log/entries</code>
+        </li>
+        <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b
+                concordion:assertEquals="status()">HTTP/1.1 200</b></li>
+        <li>And response should look like:
+<pre concordion:assertEquals="response()">{
+    "items": [
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0001",
+            "id": "WL.0001",
+            "workload": "1h",
+            "employee": "John",
+            "day": "2014/02/01",
+            "projectNames": [
+                "TheProject"
+            ]
+        },
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0003",
+            "id": "WL.0003",
+            "workload": "3h",
+            "employee": "Jane",
+            "day": "2014/02/24",
+            "projectNames": [
+                "TheProject"
+            ]
+        }
+    ]
+}</pre>
+        </li>
+    </ul>
+</div>
+<div class="example">
+
+    <h3 concordion:execute="clear()">
+        <u>Example 2</u>: Listing all entries for given Employee
+    </h3>
+
+    <ul>
+        <li>Given there are following entries
+            <table concordion:execute="workLogEntry(#id, #workload, #projectName, #employee, #day)">
+                <thead>
+                <tr>
+                    <th concordion:set="#id">Id</th>
+                    <th concordion:set="#workload">Workload</th>
+                    <th concordion:set="#projectName">Project Name</th>
+                    <th concordion:set="#employee">Employee</th>
+                    <th concordion:set="#day">Day</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>WL.0001</td>
+                    <td>1h</td>
+                    <td>TheProject</td>
+                    <td>John</td>
+                    <td>2014/02/01</td>
+                </tr>
+                <tr>
+                    <td>WL.0002</td>
+                    <td>2h</td>
+                    <td>OtherProject</td>
+                    <td>John</td>
+                    <td>2014/02/14</td>
+                </tr>
+                <tr>
+                    <td>WL.0003</td>
+                    <td>3h</td>
+                    <td>TheProject</td>
+                    <td>Jane</td>
+                    <td>2014/02/24</td>
+                </tr>
+                <tr>
+                    <td>WL.0004</td>
+                    <td>4h</td>
+                    <td>YetAnotherProject</td>
+                    <td>Jane</td>
+                    <td>2014/03/01</td>
+                </tr>
+                </tbody>
+            </table>
+        </li>
+        <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Jane/work-log/entries</code>
+        </li>
+        <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b
+                concordion:assertEquals="status()">HTTP/1.1 200</b></li>
+        <li>And response should look like:
+<pre concordion:assertEquals="response()">{
+    "items": [
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0003",
+            "id": "WL.0003",
+            "workload": "3h",
+            "employee": "Jane",
+            "day": "2014/02/24",
+            "projectNames": [
+                "TheProject"
+            ]
+        },
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0004",
+            "id": "WL.0004",
+            "workload": "4h",
+            "employee": "Jane",
+            "day": "2014/03/01",
+            "projectNames": [
+                "YetAnotherProject"
+            ]
+        }
+    ]
+}</pre>
+        </li>
+    </ul>
+</div>
+<div class="example">
+
+    <h3 concordion:execute="clear()">
+        <u>Example 3</u>: Listing all entries for given Month
+    </h3>
+
+    <ul>
+        <li>Given there are following entries
+            <table concordion:execute="workLogEntry(#id, #workload, #projectName, #employee, #day)">
+                <thead>
+                <tr>
+                    <th concordion:set="#id">Id</th>
+                    <th concordion:set="#workload">Workload</th>
+                    <th concordion:set="#projectName">Project Name</th>
+                    <th concordion:set="#employee">Employee</th>
+                    <th concordion:set="#day">Day</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>WL.0001</td>
+                    <td>1h</td>
+                    <td>TheProject</td>
+                    <td>John</td>
+                    <td>2013/02/01</td>
+                </tr>
+                <tr>
+                    <td>WL.0002</td>
+                    <td>2h</td>
+                    <td>OtherProject</td>
+                    <td>John</td>
+                    <td>2014/02/14</td>
+                </tr>
+                <tr>
+                    <td>WL.0003</td>
+                    <td>3h</td>
+                    <td>TheProject</td>
+                    <td>Jane</td>
+                    <td>2014/02/24</td>
+                </tr>
+                <tr>
+                    <td>WL.0004</td>
+                    <td>4h</td>
+                    <td>YetAnotherProject</td>
+                    <td>Jane</td>
+                    <td>2014/03/01</td>
+                </tr>
+                </tbody>
+            </table>
+        </li>
+        <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/calendar/2014/02/work-log/entries</code>
+        </li>
+        <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b
+                concordion:assertEquals="status()">HTTP/1.1 200</b></li>
+        <li>And response should look like:
+<pre concordion:assertEquals="response()">{
+    "items": [
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0002",
+            "id": "WL.0002",
+            "workload": "2h",
+            "employee": "John",
+            "day": "2014/02/14",
+            "projectNames": [
+                "OtherProject"
+            ]
+        },
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0003",
+            "id": "WL.0003",
+            "workload": "3h",
+            "employee": "Jane",
+            "day": "2014/02/24",
+            "projectNames": [
+                "TheProject"
+            ]
+        }
+    ]
+}</pre>
+        </li>
+    </ul>
+</div>
+<div class="example">
+
+    <h3 concordion:execute="clear()">
+        <u>Example 4</u>: Listing all entries for multiple Years/Months
+    </h3>
+
+    <ul>
+        <li>Given there are following entries
+            <table concordion:execute="workLogEntry(#id, #workload, #projectName, #employee, #day)">
+                <thead>
+                <tr>
+                    <th concordion:set="#id">Id</th>
+                    <th concordion:set="#workload">Workload</th>
+                    <th concordion:set="#projectName">Project Name</th>
+                    <th concordion:set="#employee">Employee</th>
+                    <th concordion:set="#day">Day</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>WL.0001</td>
+                    <td>1h</td>
+                    <td>TheProject</td>
+                    <td>John</td>
+                    <td>2013/02/01</td>
+                </tr>
+                <tr>
+                    <td>WL.0002</td>
+                    <td>2h</td>
+                    <td>OtherProject</td>
+                    <td>John</td>
+                    <td>2014/02/14</td>
+                </tr>
+                <tr>
+                    <td>WL.0003</td>
+                    <td>3h</td>
+                    <td>TheProject</td>
+                    <td>Jane</td>
+                    <td>2014/02/24</td>
+                </tr>
+                <tr>
+                    <td>WL.0004</td>
+                    <td>4h</td>
+                    <td>YetAnotherProject</td>
+                    <td>Jane</td>
+                    <td>2014/03/01</td>
+                </tr>
+                <tr>
+                    <td>WL.0005</td>
+                    <td>5h</td>
+                    <td>YetAnotherProject</td>
+                    <td>Jane</td>
+                    <td>2013/01/02</td>
+                </tr>
+                </tbody>
+            </table>
+        </li>
+        <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/calendar/201402,201403,201302/work-log/entries</code>
+        </li>
+        <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b
+                concordion:assertEquals="status()">HTTP/1.1 200</b></li>
+        <li>And response should look like:
+<pre concordion:assertEquals="response()">{
+    "items": [
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0001",
+            "id": "WL.0001",
+            "workload": "1h",
+            "employee": "John",
+            "day": "2013/02/01",
+            "projectNames": [
+                "TheProject"
+            ]
+        },
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0002",
+            "id": "WL.0002",
+            "workload": "2h",
+            "employee": "John",
+            "day": "2014/02/14",
+            "projectNames": [
+                "OtherProject"
+            ]
+        },
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0003",
+            "id": "WL.0003",
+            "workload": "3h",
+            "employee": "Jane",
+            "day": "2014/02/24",
+            "projectNames": [
+                "TheProject"
+            ]
+        },
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0004",
+            "id": "WL.0004",
+            "workload": "4h",
+            "employee": "Jane",
+            "day": "2014/03/01",
+            "projectNames": [
+                "YetAnotherProject"
+            ]
+        }
+    ]
+}</pre>
+        </li>
+    </ul>
+</div>
+</div>
+
+</body>
+</html>

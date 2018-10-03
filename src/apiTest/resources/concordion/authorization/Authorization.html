@@ -1,0 +1,88 @@
+<html
+        xmlns:concordion="http://www.concordion.org/2007/concordion"
+>
+<body>
+    <h1>Authorization</h1>
+
+    <div class="examples">
+        <div class="example">
+            <h3>
+                <u>Example</u>: User cannot delete Work Log Entry that belongs to other user
+            </h3>
+            <ul concordion:execute="clear()">
+                <li>Given user is logged in as <span concordion:execute="loggedInAs(#username)"><b concordion:set="#username">Homer</b></span></li> 
+                <li>And there is 
+                    <span concordion:execute="workLogEntryFor(#id, #employee)">Work Log Entry with id <b concordion:set="#id">WL.001</b> that belongs to <b concordion:set="#employee">Bart</b></span>
+                </li>
+                <li>When <b concordion:set="#method">DELETE</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.001</code></li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 403 Forbidden</b></li>
+            </ul>
+        </div>
+        <div class="example">
+            <h3>
+                <u>Example</u>: User cannot update Work Log Entry that belongs to other user
+            </h3>
+            <ul concordion:execute="clear()">
+                <li>Given user is logged in as <span concordion:execute="loggedInAs(#username)"><b concordion:set="#username">Homer</b></span></li> 
+                <li>And there is 
+                    <span concordion:execute="workLogEntryFor(#id, #employee)">Work Log Entry with id <b concordion:set="#id">WL.002</b>
+                        that belongs to <b concordion:set="#employee">Bart</b></span>
+                </li>
+                <li>When <span concordion:execute="validUpdate(#endpoint)"><b>valid</b> Work Log Entry update request is being send to:
+                    <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.002</code></span></li>
+                <li>Then response status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 403 Forbidden</b></li>
+            </ul>
+        </div>
+        <div class="example">
+            <h3>
+                <u>Example</u>: User cannot registeter Work Log Entry for somebody else
+            </h3>
+            <ul concordion:execute="clear()">
+                <li>Given user is logged in as <span concordion:execute="loggedInAs(#username)"><b concordion:set="#username">Homer</b></span></li> 
+                <li>When <span concordion:execute="validRegistration(#endpoint)"><b>valid</b> Work Log Entry registration request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Bart/work-log/entries</code></span></li>
+                <li>Then response status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 403 Forbidden</b></li>
+            </ul>
+        </div>
+
+        <div class="example">
+            <h3>
+                <u>Example</u>: User can delete Work Log Entry that belongs them
+            </h3>
+            <ul concordion:execute="clear()">
+                <li>Given user is logged in as <span concordion:execute="loggedInAs(#username)"><b concordion:set="#username">Homer</b></span></li>
+                <li>And there is
+                    <span concordion:execute="workLogEntryFor(#id, #username)">Work Log Entry with id <b concordion:set="#id">WL.003</b>
+                        that belongs to <b concordion:set="#username">Homer</b></span>
+                </li>
+                <li>When <b concordion:set="#method">DELETE</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.003</code></li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 204 No Content</b></li>
+            </ul>
+        </div>
+        <div class="example">
+            <h3>
+                <u>Example</u>: User can update Work Log Entry that belongs them
+            </h3>
+            <ul concordion:execute="clear()">
+                <li>Given user is logged in as <span concordion:execute="loggedInAs(#username)"><b concordion:set="#username">Homer</b></span></li>
+                <li>And there is
+                    <span concordion:execute="workLogEntryFor(#id, #username)">Work Log Entry with id <b concordion:set="#id">WL.004</b>
+                        that belongs to <b concordion:set="#username">Homer</b></span>
+                </li>
+                <li>When <span concordion:execute="validUpdate(#endpoint)"><b>valid</b> Work Log Entry update request is being send to:
+                    <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.004</code></span></li>
+                <li>Then response status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
+            </ul>
+        </div>
+        <div class="example">
+            <h3>
+                <u>Example</u>: User can register Work Log Entry
+            </h3>
+            <ul concordion:execute="clear()">
+                <li>Given user is logged in as <span concordion:execute="loggedInAs(#username)"><b concordion:set="#username">Homer</b></span></li>
+                <li>When <span concordion:execute="validRegistration(#endpoint)"><b>valid</b> Work Log Entry registration request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></span></li>
+                <li>Then response status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 201 Created</b></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
