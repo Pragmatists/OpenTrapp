@@ -47,7 +47,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-jetty')
     compile 'com.google.guava:guava:26.0-jre'
-    testCompile('org.junit:junit:4.12')
+    testCompile('junit:junit:4.12')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     compile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
     testCompile('org.springframework.security:spring-security-test')
